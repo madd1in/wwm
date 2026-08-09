@@ -772,7 +772,201 @@
     }
 
     /* =====================================================
-       DESKTOP — LESBARE SCHRIFT, SUBTILE AKZENTE
+       DESKTOP — OPTIMIERTES STUDIO-LAYOUT
+       Topbar kompakt, Status zentriert, Frage prominent,
+       Antworten im 2x2 Grid, Jokers als schmale Leiste
+    ===================================================== */
+
+    @media (min-width: 900px) {
+      html {
+        font-size: 22px;
+      }
+
+      #gameScreen {
+        display: grid;
+        grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+        grid-template-columns: 1fr;
+        width: 100vw;
+        height: calc(var(--vh, 1vh) * 100);
+        padding:
+          calc(0.6rem + env(safe-area-inset-top))
+          calc(0.8rem + env(safe-area-inset-right))
+          calc(0.6rem + env(safe-area-inset-bottom))
+          calc(0.8rem + env(safe-area-inset-left));
+        gap: 0.55rem;
+        overflow: hidden;
+      }
+
+      #gameScreen > * {
+        width: min(100%, 68rem);
+        max-width: 100%;
+        margin-inline: auto;
+      }
+
+      /* TOPBAR — kompakt, alle Controls in einer Reihe */
+      .topbar {
+        grid-row: 1;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.6rem;
+        border-width: 1px;
+        border-radius: 0.9rem;
+      }
+
+      .topButtons {
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+      }
+
+      .iconBtn {
+        min-width: 2.5rem;
+        width: 2.5rem;
+        min-height: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        padding: 0;
+        border-width: 1px;
+        font-size: 1.1rem;
+      }
+
+      .statusRow {
+        grid-row: 2;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 0.7rem;
+        align-items: center;
+        font-size: 1rem;
+        line-height: 1.1;
+        padding: 0.25rem 0.4rem;
+      }
+
+      #questionNumber,
+      #score {
+        white-space: nowrap;
+        font-weight: 900;
+        font-size: 1.05rem;
+      }
+
+      .timerBox {
+        gap: 0.4rem;
+      }
+
+      #timerWrap {
+        height: 1rem;
+        border-width: 1px;
+      }
+
+      #timerText {
+        min-width: 2.6rem;
+        font-size: 1.1rem;
+        font-weight: 900;
+      }
+
+      #notice {
+        grid-row: 3;
+        padding: 0.4rem 0.7rem;
+        border-width: 1px;
+        border-radius: 0.7rem;
+        font-size: 0.95rem;
+      }
+
+      /* QUESTION — prominent, zentriert */
+      #questionCard {
+        grid-row: 4;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        align-content: center;
+        justify-items: center;
+        text-align: center;
+        padding: 0.9rem 1.4rem;
+        border-width: 2px;
+        gap: 0.4rem;
+      }
+
+      #qEmoji {
+        display: none;
+      }
+
+      .questionTextWrap {
+        width: 100%;
+        display: grid;
+        gap: 0.35rem;
+        justify-items: center;
+      }
+
+      #bossBadge {
+        margin-inline: auto;
+        font-size: 0.78rem;
+        padding: 0.25rem 0.65rem;
+        border-width: 1px;
+      }
+
+      #qText {
+        font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+        line-height: 1.18;
+        max-width: 100%;
+      }
+
+      /* ANSWERS — sauberes 2x2 Grid */
+      #answers {
+        grid-row: 5;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+        min-height: 0;
+        height: 100%;
+      }
+
+      .answer {
+        min-height: 0;
+        height: 100%;
+        padding: 0.45rem 0.9rem;
+        gap: 0.6rem;
+        border-width: 2px;
+        font-size: clamp(1.05rem, 2vw, 1.35rem);
+        line-height: 1.15;
+      }
+
+      .answer .letter {
+        width: 2.4rem;
+        height: 2.4rem;
+        flex: 0 0 2.4rem;
+        font-size: 1.15rem;
+      }
+
+      /* JOKERS — kompakte Leiste */
+      #jokers {
+        grid-row: 6;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.5rem;
+        padding-top: 0;
+      }
+
+      .joker {
+        min-height: 2.8rem;
+        padding: 0.35rem 0.6rem;
+        border-width: 1px;
+        font-size: 0.95rem;
+        line-height: 1.1;
+      }
+
+      #toast {
+        bottom: 0.8rem;
+        padding: 0.45rem 0.85rem;
+        border-width: 2px;
+        font-size: 0.9rem;
+      }
+    }
+
+    /* =====================================================
+       DESKTOP START SCREEN
     ===================================================== */
 
     @media (min-width: 900px) {
@@ -783,33 +977,29 @@
       .hero {
         width: min(100%, 880px);
         max-height: calc(var(--vh, 1vh) * 100 - 2rem);
-        padding: 0.95rem 1.4rem;
-        gap: 0.7rem;
+        padding: 1.2rem 1.6rem;
+        gap: 0.8rem;
       }
 
       .hero .brandMark {
-        width: 5.5rem;
-        transform: rotate(-7deg) translateY(-8px);
+        width: 6rem;
       }
 
       .hero h1 {
         font-size: clamp(2.4rem, 5.5vw, 3.4rem);
         line-height: 1;
-        transform: rotate(-0.4deg);
       }
 
       .hero .subtitle {
         margin: 0.1rem 0;
         font-size: 1.15rem;
         line-height: 1.15;
-        transform: rotate(0.3deg);
       }
 
       .hero #btnStart {
         min-height: 3.5rem;
-        padding: 0.6rem 1.5rem;
+        padding: 0.6rem 2rem;
         font-size: 1.35rem;
-        transform: rotate(-0.6deg) translateY(-4px);
       }
 
       .hero .startOptions {
@@ -822,98 +1012,6 @@
         padding: 0.4rem 0.6rem;
         font-size: 0.95rem;
         line-height: 1.1;
-      }
-
-      .hero .startOptions button:nth-child(1) { transform: rotate(-1deg) translateY(2px); }
-      .hero .startOptions button:nth-child(2) { transform: rotate(0.8deg) translateY(-3px); }
-      .hero .startOptions button:nth-child(3) { transform: rotate(-0.6deg) translateY(1px); }
-      .hero .startOptions button:nth-child(4) { transform: rotate(1.1deg) translateY(-2px); }
-
-      #gameScreen {
-        grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
-        align-content: stretch;
-        gap: 0.5rem;
-        padding: 0.75rem;
-      }
-
-      .topbar {
-        min-height: 0;
-        padding: 0.4rem 0.65rem;
-        z-index: 2;
-      }
-
-      .iconBtn {
-        min-width: 3rem;
-        min-height: 3rem;
-        font-size: 1.25rem;
-      }
-
-      .statusRow {
-        min-height: 0;
-        font-size: 1.1rem;
-        z-index: 2;
-      }
-
-      #timerWrap {
-        height: 1.2rem;
-      }
-
-      #timerText {
-        min-width: 2.8rem;
-        font-size: 1.2rem;
-      }
-
-      #questionCard {
-        min-height: 0;
-        padding: 0.85rem 1.3rem;
-        z-index: 2;
-      }
-
-      #qEmoji {
-        font-size: 2.5rem;
-      }
-
-      #answers {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: 1fr;
-        min-height: 0;
-        gap: 0.55rem;
-      }
-
-      #qText {
-        font-size: clamp(1.4rem, 3vw, 2rem);
-      }
-
-      .answer {
-        min-height: 0;
-        height: 100%;
-        padding: 0.5rem 1rem;
-        gap: 0.6rem;
-        font-size: clamp(1.1rem, 2.2vw, 1.5rem);
-      }
-
-      .answer .letter {
-        width: 2.6rem;
-        height: 2.6rem;
-        font-size: 1.2rem;
-      }
-
-      #jokers {
-        min-height: 0;
-        gap: 0.55rem;
-      }
-
-      .joker {
-        min-height: 3.5rem;
-        padding: 0.4rem 0.8rem;
-        font-size: 1.1rem;
-      }
-
-      #toast {
-        bottom: 0.8rem;
-        padding: 0.5rem 0.9rem;
-        border-width: 2px;
-        font-size: 0.95rem;
       }
 
       .endBox {
@@ -941,74 +1039,59 @@
     ===================================================== */
 
     @media (min-width: 1400px) {
+      html {
+        font-size: 24px;
+      }
+
       #gameScreen {
-        padding: 1.2rem;
-        gap: 0.7rem;
+        padding: 1rem 1.5rem;
+        gap: 0.65rem;
       }
 
-      .hero {
-        padding: 1.5rem 2rem;
-      }
-
-      .hero h1 {
-        font-size: 4rem;
-      }
-
-      .topbar {
-        padding: 0.6rem 1rem;
+      #gameScreen > * {
+        width: min(100%, 76rem);
       }
 
       .iconBtn {
-        min-width: 3.5rem;
-        min-height: 3.5rem;
-        font-size: 1.5rem;
+        min-width: 2.8rem;
+        width: 2.8rem;
+        min-height: 2.8rem;
+        height: 2.8rem;
+        flex: 0 0 2.8rem;
+        font-size: 1.25rem;
       }
 
       .statusRow {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
       }
 
       #questionCard {
-        padding: 1.2rem 1.8rem;
+        padding: 1.1rem 2rem;
       }
 
       #qText {
-        font-size: 2.4rem;
+        font-size: 2rem;
       }
 
       .answer {
-        font-size: 1.7rem;
+        font-size: 1.45rem;
       }
 
       .answer .letter {
-        width: 3.2rem;
-        height: 3.2rem;
-        font-size: 1.5rem;
+        width: 2.7rem;
+        height: 2.7rem;
+        flex: 0 0 2.7rem;
+        font-size: 1.3rem;
       }
 
       .joker {
-        min-height: 4.2rem;
-        font-size: 1.3rem;
-      }
-    }
-
-    @media (min-width: 1400px) and (min-height: 900px) {
-      #gameScreen {
-        grid-template-rows: auto auto auto minmax(0, 1.2fr) auto;
-      }
-
-      .topbar {
-        grid-row: 1;
-      }
-
-      .statusRow {
-        grid-row: 1;
-        grid-column: 2;
+        min-height: 3.1rem;
+        font-size: 1.05rem;
       }
     }
 
     /* =====================================================
-       MOBILE PORTRAIT — SAUBER LESBAR, VOLLE HÖHE
+       MOBILE PORTRAIT — UNVERÄNDERT GUT
     ===================================================== */
 
     @media (max-width: 899px) and (orientation: portrait) {
@@ -1692,7 +1775,7 @@
     const SETTINGS_KEY = 'sprech-raetsel-xl-settings';
 
     let settings = {
-      fontPx: 20,
+      fontPx: 22,
       music: true,
       sound: true
     };
@@ -1927,7 +2010,7 @@
           audioCtx = new AC();
 
           musicGain = audioCtx.createGain();
-          musicGain.gain.value = 0.35;
+          musicGain.gain.value = 0.4;
           musicGain.connect(audioCtx.destination);
 
           sfxGain = audioCtx.createGain();
@@ -2058,20 +2141,44 @@
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(150, t);
-      osc.frequency.exponentialRampToValueAtTime(40, t + 0.12);
+      osc.frequency.setValueAtTime(160, t);
+      osc.frequency.exponentialRampToValueAtTime(35, t + 0.1);
       g.gain.setValueAtTime(gain, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
       osc.connect(g);
       g.connect(musicGain);
       osc.start(t);
       osc.stop(t + 0.2);
     }
 
+    function snare(gain, delay) {
+      if (!audioCtx || !musicGain) return;
+      const t = audioCtx.currentTime + (delay || 0);
+      const bufferSize = audioCtx.sampleRate * 0.1;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 3500;
+      filter.Q.value = 0.8;
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(gain, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+      source.connect(filter);
+      filter.connect(g);
+      g.connect(musicGain);
+      source.start(t);
+    }
+
     function hihat(gain, delay) {
       if (!audioCtx || !musicGain) return;
       const t = audioCtx.currentTime + (delay || 0);
-      const bufferSize = audioCtx.sampleRate * 0.05;
+      const bufferSize = audioCtx.sampleRate * 0.03;
       const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
@@ -2081,10 +2188,10 @@
       source.buffer = buffer;
       const filter = audioCtx.createBiquadFilter();
       filter.type = 'highpass';
-      filter.frequency.value = 7000;
+      filter.frequency.value = 9000;
       const g = audioCtx.createGain();
       g.gain.setValueAtTime(gain, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
       source.connect(filter);
       filter.connect(g);
       g.connect(musicGain);
@@ -2100,12 +2207,12 @@
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(freq, t);
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(300, t);
-      filter.frequency.exponentialRampToValueAtTime(800, t + dur * 0.3);
-      filter.frequency.exponentialRampToValueAtTime(200, t + dur);
+      filter.frequency.setValueAtTime(280, t);
+      filter.frequency.exponentialRampToValueAtTime(900, t + dur * 0.25);
+      filter.frequency.exponentialRampToValueAtTime(180, t + dur);
       g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(gain, t + 0.02);
-      g.gain.setValueAtTime(gain, t + dur * 0.7);
+      g.gain.exponentialRampToValueAtTime(gain, t + 0.015);
+      g.gain.setValueAtTime(gain * 0.85, t + dur * 0.7);
       g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
       osc.connect(filter);
       filter.connect(g);
@@ -2133,7 +2240,7 @@
       bgmStep = 0;
       bgmMood = mood;
 
-      const tempos = [125, 140, 160];
+      const tempos = [132, 148, 168];
       const bpm = tempos[mood];
       const beatDur = 60 / bpm;
       const rootsByMood = [
@@ -2157,54 +2264,67 @@
         const danger = run.timeLimit > 0 && run.timeLeft / run.timeLimit < 0.28;
         const stepInBeat = bgmStep % 4;
 
-        // KICK DRUM - treibend auf jedem Beat
+        // KICK DRUM - four-on-the-floor, treibend
         if (stepInBeat === 0) {
-          kickDrum(0.5, 0);
+          kickDrum(0.55, 0);
         }
 
-        // SNARE/CLAP auf 2 und 4
-        if (stepInBeat === 2 && mood > 0) {
-          hihat(0.15, 0);
+        // SNARE auf 2 und 4
+        if (stepInBeat === 2) {
+          snare(mood === 2 ? 0.22 : 0.16, 0);
         }
 
-        // HIHAT - Offbeats für Drive
-        if (stepInBeat === 1 || stepInBeat === 3) {
-          hihat(mood === 2 ? 0.12 : 0.08, 0);
+        // HIHAT - 16tel für Drive
+        hihat(mood === 2 ? 0.09 : 0.06, 0);
+        if (mood > 0 && (stepInBeat === 1 || stepInBeat === 3)) {
+          hihat(mood === 2 ? 0.12 : 0.08, beatDur * 0.5);
         }
 
-        // BASSLINE - dominant und treibend
+        // BASSLINE - pumpend, dominant
         if (stepInBeat === 0) {
-          bassline(root * 2, beatDur * 0.8, mood === 2 ? 0.35 : 0.28);
+          bassline(root * 2, beatDur * 0.85, mood === 2 ? 0.4 : 0.32);
         }
         if (stepInBeat === 2 && mood > 0) {
-          bassline(root * 2.5, beatDur * 0.6, 0.22);
+          bassline(root * 2.5, beatDur * 0.65, 0.26);
+        }
+        // Octave-Jump für Energie in Mood 2
+        if (mood === 2 && stepInBeat === 3) {
+          bassline(root * 4, beatDur * 0.4, 0.2);
         }
 
         // ARPEGGIO - melodischer Drive
         if (bgmStep % 2 === 0) {
           const arpIndex = Math.floor(bgmStep / 2) % arpPattern.length;
           const arpFreq = root * 4 * arpPattern[arpIndex];
-          arpNote(arpFreq, beatDur * 0.4, mood === 2 ? 0.08 : 0.06, 0);
+          arpNote(arpFreq, beatDur * 0.35, mood === 2 ? 0.09 : 0.07, 0);
         }
 
         // CHORD STABS - Akzente
         if (bgmStep % 8 === 1) {
-          musicChord(root * 2, beatDur * 2, mood === 2 ? 0.12 : 0.09);
+          musicChord(root * 2, beatDur * 2, mood === 2 ? 0.14 : 0.1);
+        }
+
+        // SYNTH RISER für Spannung
+        if (bgmStep % 16 === 15 && mood > 0) {
+          musicTone(root * 3, beatDur * 2, 'sine', 0.05, beatDur);
         }
 
         // DANGER MODE - zusätzlicher Druck
         if (danger) {
           if (stepInBeat === 0 || stepInBeat === 2) {
-            musicTone(880, 0.08, 'square', 0.06, 0);
+            musicTone(880, 0.06, 'square', 0.07, 0);
           }
           if (bgmStep % 4 === 0) {
-            kickDrum(0.3, beatDur * 0.5);
+            kickDrum(0.35, beatDur * 0.5);
           }
+          // Extra HiHat-Rolls
+          hihat(0.1, beatDur * 0.25);
+          hihat(0.1, beatDur * 0.75);
         }
 
         // MOOD 2 - Extra Intensität
         if (mood === 2 && bgmStep % 16 === 0) {
-          musicChord(root * 4, beatDur * 4, 0.08);
+          musicChord(root * 4, beatDur * 4, 0.09);
         }
       }, beatDur * 1000);
     }
