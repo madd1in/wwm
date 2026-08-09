@@ -435,11 +435,6 @@
       }
     }
 
-    /* =====================================================
-       QUIZSHOW-STUDIO — eigenständiger Look, inspiriert von
-       großen Prime-Time-Wissensshows
-    ===================================================== */
-
     :root {
       --night: #05041a;
       --navy: #09083a;
@@ -1033,14 +1028,11 @@
     }
 
     /* =====================================================
-       MOBILE — VERBESSERTES Layout für bessere Screen-Nutzung
+       MOBILE PORTRAIT — optimiert für maximale Screen-Nutzung
+       mit größerer Schrift und größeren Touch-Targets
     ===================================================== */
 
-    @media (max-width: 899px) {
-      html {
-        font-size: 28px;
-      }
-
+    @media (max-width: 899px) and (orientation: portrait) {
       body {
         min-width: 0;
         background-attachment: scroll;
@@ -1056,11 +1048,12 @@
         min-width: 0;
         padding:
           max(0.5rem, env(safe-area-inset-top))
-          max(0.5rem, env(safe-area-inset-right))
+          max(0.55rem, env(safe-area-inset-right))
           max(0.5rem, env(safe-area-inset-bottom))
-          max(0.5rem, env(safe-area-inset-left));
+          max(0.55rem, env(safe-area-inset-left));
       }
 
+      /* ---------- START SCREEN ---------- */
       #startScreen,
       #endScreen {
         height: 100vh;
@@ -1074,12 +1067,13 @@
       .endBox {
         width: 100%;
         min-width: 0;
-        height: calc(100dvh - 1rem);
+        height: calc(100dvh - max(1rem, env(safe-area-inset-top)) - max(1rem, env(safe-area-inset-bottom)));
         min-height: 0;
-        padding: 0.75rem;
-        gap: 0.5rem;
-        border-radius: 1.25rem;
+        padding: 1.1rem 0.9rem;
+        gap: 0.85rem;
+        border-radius: 1.4rem;
         align-content: center;
+        justify-items: center;
         overflow-x: hidden;
         overflow-y: auto;
       }
@@ -1092,63 +1086,73 @@
 
       .hero .brandMark,
       .endBox .brandMark {
-        width: 4.7rem;
+        width: 6.2rem;
+        margin-bottom: 0.1rem;
       }
 
       .brandMark span {
-        font-size: 0.54rem;
+        font-size: 0.7rem;
+        max-width: 4.5rem;
       }
 
-      .hero h1 {
+      .hero h1,
+      .endBox h2 {
         max-width: 100%;
-        font-size: clamp(1.75rem, 10vw, 2.25rem);
+        font-size: clamp(1.85rem, 9.5vw, 2.5rem);
         line-height: 1;
         overflow-wrap: anywhere;
+        letter-spacing: -0.02em;
       }
 
       .hero .subtitle,
       .endBox .subtitle {
         margin: 0.1rem 0;
-        font-size: 1rem;
+        font-size: clamp(0.95rem, 3.6vw, 1.15rem);
         line-height: 1.2;
+        padding-inline: 0.3rem;
       }
 
       .hero #btnStart,
-      .endBox button {
-        min-height: 3rem;
-        padding: 0.5rem 0.7rem;
-        border-radius: 0.9rem;
-        font-size: 1.15rem;
+      .endBox button.primary {
+        width: min(90%, 22rem);
+        min-height: 3.5rem;
+        padding: 0.65rem 1rem;
+        border-radius: 1rem;
+        font-size: clamp(1.15rem, 4.5vw, 1.4rem);
+        margin-top: 0.2rem;
       }
 
       .hero .startOptions {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.5rem;
+        width: 100%;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.55rem;
+        margin-top: 0.2rem;
       }
 
       .hero .startOptions button {
         min-width: 0;
-        min-height: 2.85rem;
-        padding: 0.4rem;
-        border-radius: 0.8rem;
-        font-size: 0.9rem;
-        line-height: 1.1;
+        min-height: 3.1rem;
+        padding: 0.55rem 0.4rem;
+        border-radius: 0.9rem;
+        font-size: clamp(0.88rem, 3.2vw, 1rem);
+        line-height: 1.15;
         overflow-wrap: anywhere;
       }
 
+      /* ---------- GAME SCREEN ---------- */
       #gameScreen {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-rows: auto auto auto auto 1fr auto;
         width: 100%;
         min-width: 0;
         height: 100vh;
         height: 100dvh;
         padding:
-          max(0.35rem, env(safe-area-inset-top))
-          max(0.35rem, env(safe-area-inset-right))
-          max(0.4rem, env(safe-area-inset-bottom))
-          max(0.35rem, env(safe-area-inset-left));
-        gap: 0.4rem;
+          max(0.4rem, env(safe-area-inset-top))
+          max(0.5rem, env(safe-area-inset-right))
+          max(0.45rem, env(safe-area-inset-bottom))
+          max(0.5rem, env(safe-area-inset-left));
+        gap: 0.55rem;
         overflow-x: hidden;
         overflow-y: auto;
         scrollbar-gutter: auto;
@@ -1157,45 +1161,49 @@
       #gameScreen > * {
         min-width: 0;
         max-width: 100%;
+        width: 100%;
       }
 
       .topbar {
         grid-row: 1;
         min-height: 0;
         flex-wrap: nowrap;
-        padding: 0.35rem 0.45rem;
+        justify-content: space-between;
+        padding: 0.4rem 0.55rem;
         border-width: 1px;
-        border-radius: 0.85rem;
+        border-radius: 0.95rem;
       }
 
       .topButtons {
         min-width: 0;
-        gap: 0.35rem;
+        gap: 0.4rem;
       }
 
       .iconBtn {
-        min-width: 2.5rem;
-        width: 2.5rem;
-        min-height: 2.5rem;
-        height: 2.5rem;
-        flex: 0 0 2.5rem;
+        min-width: 2.6rem;
+        width: 2.6rem;
+        min-height: 2.6rem;
+        height: 2.6rem;
+        flex: 0 0 2.6rem;
         padding: 0;
         border-width: 1px;
-        font-size: 1.05rem;
+        font-size: 1.15rem;
       }
 
       .statusRow {
         grid-row: 2;
         grid-template-columns: auto minmax(0, 1fr) auto;
-        gap: 0.4rem;
+        gap: 0.5rem;
         min-height: 0;
-        font-size: 0.95rem;
+        font-size: clamp(0.9rem, 3vw, 1rem);
         line-height: 1;
+        padding-inline: 0.15rem;
       }
 
       #questionNumber,
       #score {
         white-space: nowrap;
+        font-weight: 900;
       }
 
       .timerBox {
@@ -1203,28 +1211,29 @@
       }
 
       #timerWrap {
-        height: 0.85rem;
+        height: 0.95rem;
         border-width: 1px;
       }
 
       #timerText {
-        min-width: 2.2rem;
+        min-width: 2.3rem;
         font-size: 0.95rem;
+        font-weight: 900;
       }
 
       #notice {
         grid-row: 3;
-        padding: 0.4rem 0.6rem;
+        padding: 0.5rem 0.65rem;
         border-width: 1px;
-        border-radius: 0.65rem;
-        font-size: 0.9rem;
+        border-radius: 0.75rem;
+        font-size: clamp(0.9rem, 3.2vw, 1rem);
       }
 
       #questionCard {
         grid-row: 4;
         min-height: 0;
         grid-template-columns: 1fr;
-        padding: 0.7rem 1.1rem;
+        padding: 0.75rem 1.1rem;
         border-width: 1px;
         text-align: center;
         clip-path: polygon(2.5% 0, 97.5% 0, 100% 50%, 97.5% 100%, 2.5% 100%, 0 50%);
@@ -1235,38 +1244,51 @@
       }
 
       #qText {
-        font-size: clamp(1.4rem, 8vw, 1.85rem);
+        font-size: clamp(1.35rem, 6.5vw, 1.85rem);
         line-height: 1.15;
         overflow-wrap: anywhere;
         hyphens: auto;
+        font-weight: 900;
       }
 
       #bossBadge {
         margin-inline: auto;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
+        padding: 0.3rem 0.7rem;
         border-width: 1px;
       }
 
+      /* Antworten nehmen den freien Raum ein */
       #answers {
         grid-row: 5;
-        flex: 1 1 0;
+        display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, minmax(3.8rem, 1fr));
+        grid-template-rows: repeat(4, minmax(4rem, 1fr));
+        gap: 0.55rem;
         min-height: 0;
-        height: auto;
-        gap: 0.5rem;
+        height: 100%;
       }
 
       .answer {
         min-width: 0;
-        height: 100%;
-        min-height: 3.8rem;
-        padding: 0.45rem 0.9rem;
-        gap: 0.6rem;
+        min-height: 0;
+        padding: 0.55rem 1rem;
+        gap: 0.65rem;
         border-width: 1px;
-        font-size: 1.25rem;
+        font-size: clamp(1.15rem, 5vw, 1.4rem);
         line-height: 1.15;
         clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+      }
+
+      .answer .letter {
+        width: 2.55rem;
+        height: 2.55rem;
+        flex: 0 0 2.55rem;
+        font-size: 1.3rem;
+      }
+
+      .answer > span:last-child {
+        font-weight: 800;
       }
 
       .answer:active:not(:disabled),
@@ -1276,46 +1298,55 @@
         transform: scale(0.985);
       }
 
-      .answer .letter {
-        width: 2.5rem;
-        height: 2.5rem;
-        flex: 0 0 2.5rem;
-        font-size: 1.25rem;
-      }
-
+      /* Joker-Leiste */
       #jokers {
         grid-row: 6;
         position: relative;
-        min-height: 3rem;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.4rem;
+        gap: 0.45rem;
         padding-top: 0;
       }
 
       .joker {
         min-width: 0;
-        min-height: 3rem;
-        padding: 0.35rem 0.25rem;
+        min-height: 3.15rem;
+        padding: 0.4rem 0.3rem;
         border-width: 1px;
-        font-size: 0.95rem;
+        font-size: clamp(0.92rem, 3.4vw, 1.05rem);
         line-height: 1.1;
         overflow-wrap: anywhere;
+        font-weight: 900;
       }
 
       #toast {
         bottom: calc(0.5rem + env(safe-area-inset-bottom));
-        max-width: calc(100vw - 1rem);
-        padding: 0.4rem 0.6rem;
+        max-width: calc(100vw - 1.2rem);
+        padding: 0.55rem 0.75rem;
         border-width: 1px;
-        border-radius: 0.65rem;
-        font-size: 0.85rem;
+        border-radius: 0.8rem;
+        font-size: 0.9rem;
       }
 
       #endAmount {
-        font-size: 2.25rem;
+        font-size: clamp(2.2rem, 10vw, 2.8rem);
+        margin: 0.1rem 0;
+      }
+
+      .endBox h2 {
+        font-size: clamp(1.6rem, 7vw, 2.1rem);
+      }
+
+      .endBox button {
+        width: min(88%, 20rem);
+      }
+
+      .endBox button#btnHome {
+        min-height: 3rem;
+        font-size: 1rem;
       }
     }
 
+    /* ---------- LANDSCAPE MOBILE ---------- */
     @media (max-width: 899px) and (orientation: landscape) {
       .hero {
         width: min(100%, 760px);
@@ -1417,34 +1448,41 @@
     }
 
     @media (max-width: 360px) {
-      html {
-        font-size: 24px;
-      }
-
       .hero .brandMark,
       .endBox .brandMark {
-        width: 4.1rem;
+        width: 5rem;
       }
 
-      .hero h1 {
-        font-size: 1.5rem;
+      .hero h1,
+      .endBox h2 {
+        font-size: clamp(1.65rem, 8vw, 2rem);
       }
 
-      .hero .subtitle {
-        font-size: 0.82rem;
+      .hero .subtitle,
+      .endBox .subtitle {
+        font-size: 0.85rem;
       }
 
       .statusRow {
-        font-size: 0.75rem;
+        font-size: 0.82rem;
+      }
+
+      #qText {
+        font-size: clamp(1.2rem, 5.8vw, 1.5rem);
       }
 
       .answer {
-        padding-inline: 0.65rem;
+        padding-inline: 0.75rem;
         font-size: 1.05rem;
       }
 
       .joker {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
+        min-height: 2.8rem;
+      }
+
+      #endAmount {
+        font-size: 2.1rem;
       }
     }
   </style>
@@ -1551,24 +1589,24 @@
         { question: 'Wie heißt die Hauptstadt von Österreich?', options: ['Graz', 'Salzburg', 'Innsbruck', 'Wien'], answer: 'Wien', emoji: '🏛️', fact: 'Wien ist Hauptstadt und zugleich ein Bundesland Österreichs.' }
       ],
       [
-        { question: 'Welches Tier gilt sprichwörtlich als „König der Tiere"?', options: ['Tiger', 'Elefant', 'Löwe', 'Adler'], answer: 'Löwe', emoji: '🦁', fact: 'Der Löwe trägt diesen Beinamen.' },
+        { question: 'Welches Tier gilt sprichwörtlich als „König der Tiere“?', options: ['Tiger', 'Elefant', 'Löwe', 'Adler'], answer: 'Löwe', emoji: '🦁', fact: 'Der Löwe trägt diesen Beinamen.' },
         { question: 'Welches Instrument besitzt Tasten, Saiten und Pedale?', options: ['Flöte', 'Klavier', 'Trompete', 'Akkordeon'], answer: 'Klavier', emoji: '🎹', fact: 'Beim Klavier schlagen Hämmer über die Tasten auf Saiten.' }
       ],
       [
         { question: 'Bei welcher Temperatur kocht Wasser auf Meereshöhe?', options: ['80 °C', '90 °C', '100 °C', '120 °C'], answer: '100 °C', emoji: '🌡️', fact: 'Bei normalem Luftdruck liegt der Siedepunkt bei 100 Grad Celsius.' },
-        { question: 'Wer schrieb „Jim Knopf und Lukas der Lokomotivführer"?', options: ['Erich Kästner', 'Michael Ende', 'Otfried Preußler', 'Cornelia Funke'], answer: 'Michael Ende', emoji: '📚', fact: 'Michael Ende veröffentlichte den Kinderbuchklassiker 1960.' }
+        { question: 'Wer schrieb „Jim Knopf und Lukas der Lokomotivführer“?', options: ['Erich Kästner', 'Michael Ende', 'Otfried Preußler', 'Cornelia Funke'], answer: 'Michael Ende', emoji: '📚', fact: 'Michael Ende veröffentlichte den Kinderbuchklassiker 1960.' }
       ],
       [
         { question: 'Welcher Planet ist besonders für sein auffälliges Ringsystem bekannt?', options: ['Mars', 'Venus', 'Saturn', 'Merkur'], answer: 'Saturn', emoji: '🪐', fact: 'Auch andere Gasplaneten haben Ringe, doch die des Saturn sind besonders markant.' },
-        { question: 'Was bedeutet die lateinische Redewendung „Carpe diem"?', options: ['Nutze den Tag', 'Die Zeit heilt', 'Lebe und lerne', 'Das Glück ist blind'], answer: 'Nutze den Tag', emoji: '⏳', fact: 'Die Wendung stammt aus einer Ode des römischen Dichters Horaz.' }
+        { question: 'Was bedeutet die lateinische Redewendung „Carpe diem“?', options: ['Nutze den Tag', 'Die Zeit heilt', 'Lebe und lerne', 'Das Glück ist blind'], answer: 'Nutze den Tag', emoji: '⏳', fact: 'Die Wendung stammt aus einer Ode des römischen Dichters Horaz.' }
       ],
       [
         { question: 'Wie heißt die Währung Japans?', options: ['Won', 'Yuan', 'Yen', 'Baht'], answer: 'Yen', emoji: '💴', fact: 'Der Yen ist seit 1871 die japanische Währung.' },
         { question: 'In welcher Stadt steht das Brandenburger Tor?', options: ['Potsdam', 'Berlin', 'Hamburg', 'Dresden'], answer: 'Berlin', emoji: '🏙️', fact: 'Das Brandenburger Tor steht am Pariser Platz in Berlin.' }
       ],
       [
-        { question: 'Für welches chemische Element steht das Symbol „Au"?', options: ['Silber', 'Gold', 'Kupfer', 'Aluminium'], answer: 'Gold', emoji: '⚗️', fact: 'Au leitet sich vom lateinischen „aurum" ab.' },
-        { question: 'Wer malte die „Mona Lisa"?', options: ['Michelangelo', 'Raffael', 'Leonardo da Vinci', 'Sandro Botticelli'], answer: 'Leonardo da Vinci', emoji: '🖼️', fact: 'Leonardo da Vinci malte das berühmte Porträt im frühen 16. Jahrhundert.' }
+        { question: 'Für welches chemische Element steht das Symbol „Au“?', options: ['Silber', 'Gold', 'Kupfer', 'Aluminium'], answer: 'Gold', emoji: '⚗️', fact: 'Au leitet sich vom lateinischen „aurum“ ab.' },
+        { question: 'Wer malte die „Mona Lisa“?', options: ['Michelangelo', 'Raffael', 'Leonardo da Vinci', 'Sandro Botticelli'], answer: 'Leonardo da Vinci', emoji: '🖼️', fact: 'Leonardo da Vinci malte das berühmte Porträt im frühen 16. Jahrhundert.' }
       ],
       [
         { question: 'Wie heißt die Hauptstadt Australiens?', options: ['Sydney', 'Melbourne', 'Canberra', 'Perth'], answer: 'Canberra', emoji: '🌏', fact: 'Canberra wurde als Kompromiss zwischen Sydney und Melbourne Hauptstadt.' },
@@ -1591,7 +1629,7 @@
         { question: 'Wer formulierte die nach ihm benannte Unschärferelation?', options: ['Max Planck', 'Werner Heisenberg', 'Niels Bohr', 'Erwin Schrödinger'], answer: 'Werner Heisenberg', emoji: '⚛️', fact: 'Werner Heisenberg formulierte die Unschärferelation 1927.' }
       ],
       [
-        { question: 'Wer malte das Gemälde „Las Meninas"?', options: ['Francisco de Goya', 'El Greco', 'Diego Velázquez', 'Bartolomé Murillo'], answer: 'Diego Velázquez', emoji: '🎭', fact: 'Diego Velázquez vollendete das Werk 1656.' },
+        { question: 'Wer malte das Gemälde „Las Meninas“?', options: ['Francisco de Goya', 'El Greco', 'Diego Velázquez', 'Bartolomé Murillo'], answer: 'Diego Velázquez', emoji: '🎭', fact: 'Diego Velázquez vollendete das Werk 1656.' },
         { question: 'Welche dieser Sprachen gilt als Sprachisolat?', options: ['Katalanisch', 'Baskisch', 'Bretonisch', 'Galicisch'], answer: 'Baskisch', emoji: '🗣️', fact: 'Für das Baskische ist keine Verwandtschaft mit einer anderen lebenden Sprache belegt.' }
       ],
       [
@@ -1600,7 +1638,7 @@
       ],
       [
         { question: 'Wer führte nach Magellans Tod die erste Weltumsegelung zu Ende?', options: ['Hernán Cortés', 'Juan Sebastián Elcano', 'Bartolomeu Dias', 'Amerigo Vespucci'], answer: 'Juan Sebastián Elcano', emoji: '⛵', fact: 'Elcano brachte 1522 das letzte Schiff der Expedition nach Spanien zurück.' },
-        { question: 'Welcher Mathematiker führte das Unendlichkeitszeichen „∞" ein?', options: ['Leonhard Euler', 'Gottfried Wilhelm Leibniz', 'John Wallis', 'Isaac Newton'], answer: 'John Wallis', emoji: '∞️', fact: 'John Wallis verwendete das Zeichen erstmals 1655.' }
+        { question: 'Welcher Mathematiker führte das Unendlichkeitszeichen „∞“ ein?', options: ['Leonhard Euler', 'Gottfried Wilhelm Leibniz', 'John Wallis', 'Isaac Newton'], answer: 'John Wallis', emoji: '∞️', fact: 'John Wallis verwendete das Zeichen erstmals 1655.' }
       ]
     ];
 
@@ -1615,7 +1653,7 @@
     const SETTINGS_KEY = 'sprech-raetsel-xl-settings';
 
     let settings = {
-      fontPx: 32,
+      fontPx: 34,
       music: true,
       sound: true
     };
@@ -1737,16 +1775,17 @@
       let effectivePx = settings.fontPx;
 
       if (window.innerWidth < 600) {
-        effectivePx = Math.max(24, Math.min(40, Math.round(settings.fontPx * 0.85)));
-      } else if (window.innerWidth < 900) {
+        // Mobile: größere Grundschrift für besseren Screen-Fill
         effectivePx = Math.max(26, Math.min(40, Math.round(settings.fontPx * 0.9)));
+      } else if (window.innerWidth < 900) {
+        effectivePx = Math.max(24, Math.min(38, Math.round(settings.fontPx * 0.9)));
       }
 
       document.documentElement.style.fontSize = effectivePx + 'px';
     }
 
     function changeFont(delta) {
-      settings.fontPx = Math.max(26, Math.min(56, settings.fontPx + delta));
+      settings.fontPx = Math.max(26, Math.min(54, settings.fontPx + delta));
       applyFont();
       saveSettings();
       toast('Schriftgröße geändert');
@@ -2047,4 +2086,775 @@
       try {
         window.speechSynthesis.cancel();
 
-        const u = new SpeechSynthesisUt
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'de-DE';
+        u.rate = 1.0;
+        u.pitch = 1;
+        u.volume = 0.45;
+
+        const voices = window.speechSynthesis.getVoices();
+        const de = voices.find(function (v) {
+          return v.lang && v.lang.toLowerCase().startsWith('de');
+        });
+
+        if (de) u.voice = de;
+
+        window.speechSynthesis.speak(u);
+      } catch (e) {}
+    }
+
+    function prepareRun() {
+      if (transitionTimer) clearTimeout(transitionTimer);
+      if (run.timerInterval) clearInterval(run.timerInterval);
+
+      run = {
+        answered: 0,
+        qIndex: 0,
+        score: 0,
+        streak: 0,
+        locked: false,
+        active: false,
+        paused: false,
+        pauseReason: null,
+        pendingActivate: false,
+        question: null,
+        timerInterval: null,
+        timeLeft: QUESTION_TIME,
+        timeLimit: QUESTION_TIME,
+        selectTimeLeft: 0,
+        lastTick: 0,
+        jokers: {
+          fifty: false,
+          hint: false,
+          time: false
+        }
+      };
+
+      ['j5050', 'jHint', 'jTime'].forEach(function (id) {
+        const btn = $(id);
+        if (!btn) return;
+
+        btn.disabled = false;
+        btn.classList.remove('used');
+      });
+
+      updateScoreUI();
+      document.body.classList.remove('timeDanger');
+    }
+
+    function startRun() {
+      if (startupLock) return;
+
+      startupLock = true;
+
+      ensureAudio();
+      prepareRun();
+      showScreen('gameScreen');
+      loadQuestion();
+
+      speak('Los geht es.');
+
+      transitionTimer = setTimeout(function () {
+        startupLock = false;
+
+        if ($('gameScreen').hidden) return;
+
+        if (document.hidden) {
+          run.pendingActivate = true;
+        } else {
+          activateQuestion();
+        }
+      }, 1400);
+    }
+
+    function generateQuestion(level) {
+      const variants = QUESTION_LADDER[level];
+      const source = variants[Math.floor(Math.random() * variants.length)];
+      const options = source.options
+        .map(function (text) {
+          return { text: text, sort: Math.random() };
+        })
+        .sort(function (a, b) {
+          return a.sort - b.sort;
+        })
+        .map(function (item) {
+          return item.text;
+        });
+
+      return {
+        clue: source.question,
+        emoji: source.emoji,
+        options: options,
+        correct: source.answer,
+        correctIndex: options.indexOf(source.answer),
+        fact: source.fact
+      };
+    }
+
+    function loadQuestion() {
+      if (run.answered >= MONEY.length) {
+        showWin();
+        return;
+      }
+
+      run.qIndex = run.answered;
+      run.locked = false;
+      run.active = false;
+      run.paused = false;
+      run.pauseReason = null;
+      run.pendingActivate = false;
+
+      const isSafetyLevel = run.qIndex === 4 || run.qIndex === 9;
+      const isMillionQuestion = run.qIndex === MONEY.length - 1;
+
+      run.question = generateQuestion(run.qIndex);
+      run.question.boss = isSafetyLevel || isMillionQuestion;
+
+      $('qEmoji').textContent = run.question.emoji;
+      $('qText').textContent = run.question.clue;
+      $('bossBadge').hidden = !run.question.boss;
+      $('bossBadge').textContent = isMillionQuestion
+        ? '👑 Die Millionenfrage'
+        : '🔒 Sicherheitsstufe';
+
+      renderAnswers();
+      updateScoreUI();
+      updateMoneyLadder();
+
+      run.timeLimit = QUESTION_TIME;
+      run.timeLeft = QUESTION_TIME;
+      run.lastTick = 0;
+
+      updateTimerUI();
+      setAnswersEnabled(false);
+
+      $('questionNumber').textContent =
+        'Frage ' + Math.min(15, run.qIndex + 1) + '/15';
+
+      if (isSafetyLevel) {
+        showNotice('🔒 Diese Frage sichert ' + MONEY[run.qIndex] + ' €');
+      } else if (isMillionQuestion) {
+        showNotice('👑 Jetzt geht es um die Million!');
+      }
+    }
+
+    function activateQuestion() {
+      if ($('gameScreen').hidden || run.active || run.paused) return;
+
+      run.active = true;
+      run.pendingActivate = false;
+
+      setAnswersEnabled(true);
+      startTimer();
+      startBGM();
+      speakQuestion();
+    }
+
+    function renderAnswers() {
+      const wrap = $('answers');
+      if (!wrap) return;
+
+      wrap.innerHTML = '';
+
+      run.question.options.forEach(function (opt, i) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'answer';
+        btn.id = 'answer-' + i;
+        btn.disabled = true;
+
+        const letter = document.createElement('span');
+        letter.className = 'letter';
+        letter.textContent = LETTERS[i];
+
+        const text = document.createElement('span');
+        text.textContent = opt;
+
+        btn.appendChild(letter);
+        btn.appendChild(text);
+
+        btn.setAttribute(
+          'aria-label',
+          'Antwort ' + LETTERS[i] + ': ' + opt
+        );
+
+        btn.addEventListener('click', function () {
+          selectAnswer(i);
+        });
+
+        wrap.appendChild(btn);
+      });
+    }
+
+    function setAnswersEnabled(enabled) {
+      const wrap = $('answers');
+      if (!wrap) return;
+
+      Array.from(wrap.children).forEach(function (btn) {
+        if (btn.classList.contains('disabled')) {
+          btn.disabled = true;
+        } else {
+          btn.disabled = !enabled;
+        }
+      });
+    }
+
+    function updateScoreUI() {
+      const scoreEl = $('score');
+      if (!scoreEl) return;
+
+      const won = run.score ? run.score + ' €' : '0 €';
+      const wonIndex = run.score ? MONEY.indexOf(run.score) : -1;
+      const nextIndex = Math.min(MONEY.length - 1, wonIndex + 1);
+      const next = MONEY[nextIndex] + ' €';
+
+      scoreEl.textContent =
+        (run.streak > 1 ? '🔥 ' + run.streak + ' · ' : '') +
+        won + ' → ' + next;
+
+      updateMoneyLadder();
+    }
+
+    function startTimer() {
+      clearTimer();
+
+      run.timerInterval = setInterval(function () {
+        run.timeLeft -= 0.1;
+
+        if (run.timeLeft <= 0) {
+          clearTimer();
+          timeUp();
+        }
+
+        updateTimerUI();
+
+        const pct = Math.max(0, (run.timeLeft / run.timeLimit) * 100);
+        const sec = Math.ceil(run.timeLeft);
+
+        if (pct < 25 && sec !== run.lastTick) {
+          run.lastTick = sec;
+          sfxTone(950, 0.05, 'square', 0.03);
+        }
+      }, 100);
+    }
+
+    function clearTimer() {
+      if (run.timerInterval) {
+        clearInterval(run.timerInterval);
+        run.timerInterval = null;
+      }
+    }
+
+    function updateTimerUI() {
+      const pct = Math.max(0, (run.timeLeft / run.timeLimit) * 100);
+
+      const fill = $('timerFill');
+      const text = $('timerText');
+
+      if (!fill || !text) return;
+
+      fill.style.width = Math.min(100, pct) + '%';
+      fill.classList.toggle('low', pct < 30);
+      text.textContent = Math.ceil(run.timeLeft) + 's';
+
+      document.body.classList.toggle(
+        'timeDanger',
+        pct < 25 && !$('gameScreen').hidden
+      );
+    }
+
+    function timeUp() {
+      if (!run.active || run.locked || run.paused) return;
+
+      run.locked = true;
+      run.active = false;
+
+      setAnswersEnabled(false);
+      stopBGM();
+      sfxWrong();
+
+      speak('Die Zeit ist vorbei.');
+
+      const correctBtn = $('answer-' + run.question.correctIndex);
+      if (correctBtn) {
+        correctBtn.classList.add('correct');
+      }
+
+      setTimeout(function () {
+        if ($('gameScreen').hidden) return;
+        showWrong('Zeit ist vorbei.');
+      }, 1600);
+    }
+
+    function selectAnswer(i) {
+      if (!run.active || run.locked || run.paused) return;
+
+      const btn = $('answer-' + i);
+      if (!btn || btn.disabled) return;
+
+      run.locked = true;
+      run.active = false;
+      run.selectTimeLeft = run.timeLeft;
+
+      clearTimer();
+      setAnswersEnabled(false);
+
+      btn.classList.add('selected');
+      sfxSuspense();
+      haptic(28);
+
+      speak('Antwort ' + LETTERS[i] + ' ist eingeloggt. Ist das richtig?');
+
+      setTimeout(function () {
+        if ($('gameScreen').hidden) return;
+        revealAnswer(i);
+      }, run.qIndex >= 10 ? 1800 : 1250);
+    }
+
+    function revealAnswer(i) {
+      const q = run.question;
+
+      const selectedBtn = $('answer-' + i);
+      const correctBtn = $('answer-' + q.correctIndex);
+
+      if (!selectedBtn || !correctBtn) return;
+
+      if (i === q.correctIndex) {
+        selectedBtn.classList.remove('selected');
+        selectedBtn.classList.add('correct');
+
+        sfxCorrect();
+        haptic([30, 45, 70]);
+        confetti(30);
+
+        run.score = MONEY[run.qIndex];
+        run.streak++;
+
+        updateScoreUI();
+
+        speak('Das ist richtig! ' + q.fact);
+
+        if (run.qIndex === MONEY.length - 1) {
+          stopBGM();
+
+          setTimeout(function () {
+            if ($('gameScreen').hidden) return;
+            showWin();
+          }, 1600);
+        } else {
+          setTimeout(function () {
+            if ($('gameScreen').hidden) return;
+
+            run.answered++;
+            loadQuestion();
+            showNotice('Frage ' + (run.qIndex + 1) + ' kommt …');
+
+            transitionTimer = setTimeout(function () {
+              if ($('gameScreen').hidden) return;
+
+              if (document.hidden) {
+                run.pendingActivate = true;
+              } else {
+                activateQuestion();
+              }
+            }, 1100);
+          }, 1200);
+        }
+      } else {
+        selectedBtn.classList.remove('selected');
+        selectedBtn.classList.add('wrong');
+        correctBtn.classList.add('correct');
+
+        run.streak = 0;
+        updateScoreUI();
+
+        sfxWrong();
+        haptic([85, 45, 85]);
+        stopBGM();
+
+        speak('Leider falsch. Richtig wäre ' + q.correct + ' gewesen. ' + q.fact);
+
+        setTimeout(function () {
+          if ($('gameScreen').hidden) return;
+          showWrong('Falsche Antwort.');
+        }, 1650);
+      }
+    }
+
+    function showWin() {
+      stopBGM();
+      clearTimer();
+
+      run.active = false;
+      run.locked = true;
+      run.paused = false;
+      run.pendingActivate = false;
+
+      document.body.classList.remove('timeDanger');
+
+      $('endTitle').textContent = '🎉 Millionär!';
+      $('endAmount').textContent = MONEY[MONEY.length - 1] + ' €';
+      $('endText').textContent =
+        'Alle 15 Fragen richtig. Serie: ' + run.streak + '.';
+
+      showScreen('endScreen');
+      confetti(200);
+      sfxCorrect();
+
+      speak('Glückwunsch! Sie haben die Million gewonnen!');
+    }
+
+    function showWrong(reason) {
+      stopBGM();
+      clearTimer();
+
+      run.active = false;
+      run.locked = true;
+      run.paused = false;
+      run.pendingActivate = false;
+
+      document.body.classList.remove('timeDanger');
+
+      $('endTitle').textContent = 'Schade!';
+      const guaranteed = run.answered >= 10
+        ? MONEY[9]
+        : (run.answered >= 5 ? MONEY[4] : '0');
+
+      $('endAmount').textContent = guaranteed + ' €';
+      $('endText').textContent =
+        reason + ' ' +
+        'Richtig war: ' + run.question.correct + '. ' +
+        run.question.fact;
+
+      showScreen('endScreen');
+    }
+
+    function quitGame() {
+      stopBGM();
+      clearTimer();
+
+      if (transitionTimer) clearTimeout(transitionTimer);
+      if (noticeTimer) clearTimeout(noticeTimer);
+      if (toastTimer) clearTimeout(toastTimer);
+
+      startupLock = false;
+
+      run.active = false;
+      run.locked = false;
+      run.paused = false;
+      run.pauseReason = null;
+      run.pendingActivate = false;
+
+      document.body.classList.remove('timeDanger');
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      showScreen('startScreen');
+      updateButtons();
+    }
+
+    function useFifty() {
+      if (!run.active || run.locked || run.paused || run.jokers.fifty || $('j5050').disabled) return;
+
+      run.jokers.fifty = true;
+      $('j5050').disabled = true;
+      $('j5050').classList.add('used');
+
+      sfxClick();
+      haptic(20);
+      toast('50:50');
+
+      const q = run.question;
+
+      const wrongs = q.options
+        .map(function (_, i) {
+          return i;
+        })
+        .filter(function (i) {
+          const btn = $('answer-' + i);
+          return i !== q.correctIndex && btn && !btn.disabled;
+        });
+
+      wrongs.sort(function () {
+        return Math.random() - 0.5;
+      });
+
+      wrongs.slice(0, 2).forEach(function (i) {
+        const btn = $('answer-' + i);
+        if (!btn) return;
+
+        btn.disabled = true;
+        btn.classList.add('disabled');
+      });
+
+      speak('Der 50:50-Joker entfernt zwei falsche Antworten.');
+    }
+
+    function useHint() {
+      if (!run.active || run.locked || run.paused || run.jokers.hint || $('jHint').disabled) return;
+
+      run.jokers.hint = true;
+      $('jHint').disabled = true;
+      $('jHint').classList.add('used');
+
+      sfxClick();
+      haptic(20);
+
+      const q = run.question;
+      const weights = q.options.map(function (_, i) {
+        return i === q.correctIndex
+          ? 55 + Math.random() * 20
+          : 7 + Math.random() * 14;
+      });
+      const total = weights.reduce(function (sum, value) {
+        return sum + value;
+      }, 0);
+      const percentages = weights.map(function (value) {
+        return Math.round(value / total * 100);
+      });
+      percentages[q.correctIndex] += 100 - percentages.reduce(function (sum, value) {
+        return sum + value;
+      }, 0);
+
+      percentages.forEach(function (percent, i) {
+        const btn = $('answer-' + i);
+        if (btn && btn.children[1]) {
+          btn.children[1].textContent = q.options[i] + ' · ' + percent + ' %';
+        }
+      });
+
+      const result = percentages.map(function (percent, i) {
+        return LETTERS[i] + ' ' + percent + ' Prozent';
+      }).join(', ');
+
+      showNotice('👥 Publikum: ' + percentages.map(function (percent, i) {
+        return LETTERS[i] + ' ' + percent + ' %';
+      }).join(' · '));
+      speak('Das Publikum hat abgestimmt. ' + result + '.');
+    }
+
+    function useTimeBonus() {
+      if (!run.active || run.locked || run.paused || run.jokers.time || $('jTime').disabled) return;
+
+      run.jokers.time = true;
+      $('jTime').disabled = true;
+      $('jTime').classList.add('used');
+
+      run.timeLeft += 10;
+      updateTimerUI();
+
+      sfxClick();
+      haptic(20);
+      toast('+10 Sekunden');
+
+      speak('Zeitbonus: plus zehn Sekunden.');
+    }
+
+    function pauseGame(reason, silent) {
+      if (!$('gameScreen').hidden && run.active && !run.locked && !run.paused) {
+        run.paused = true;
+        run.pauseReason = reason || 'manual';
+
+        clearTimer();
+        stopBGM();
+        setAnswersEnabled(false);
+        document.body.classList.remove('timeDanger');
+
+        if (!silent) {
+          showNotice('Pause');
+        }
+
+        updatePauseButton();
+      }
+    }
+
+    function resumeGame() {
+      if (!$('gameScreen').hidden && run.paused && run.active && !run.locked) {
+        run.paused = false;
+        run.pauseReason = null;
+
+        showNotice('Weiter geht’s');
+        startTimer();
+        setAnswersEnabled(true);
+
+        if (settings.music) {
+          startBGM();
+        }
+
+        updatePauseButton();
+      }
+    }
+
+    function togglePause() {
+      if (run.paused) {
+        if (run.active) {
+          resumeGame();
+        } else {
+          run.paused = false;
+          run.pauseReason = null;
+          updatePauseButton();
+        }
+      } else {
+        pauseGame('manual', false);
+      }
+    }
+
+    function updatePauseButton() {
+      const btn = $('btnPause');
+      if (!btn) return;
+
+      btn.textContent = run.paused ? '▶️' : '⏸️';
+      btn.setAttribute('aria-label', run.paused ? 'Weiter' : 'Pause');
+    }
+
+    function onVisibilityChange() {
+      if (document.hidden) {
+        if (run.active && !run.locked && !run.paused) {
+          pauseGame('auto', true);
+        }
+      } else {
+        if ($('gameScreen').hidden) return;
+
+        if (run.pendingActivate) {
+          run.pendingActivate = false;
+          activateQuestion();
+        } else if (run.paused && run.active && !run.locked && run.pauseReason === 'auto') {
+          resumeGame();
+        }
+      }
+    }
+
+    function bindButtons() {
+      $('btnStart').addEventListener('click', function () {
+        ensureAudio();
+        startRun();
+      });
+
+      $('btnIntro').addEventListener('click', function () {
+        ensureAudio();
+        sfxClick();
+
+        speak(
+          'Anleitung. ' +
+          'Sie bekommen eine Frage und vier Antworten. ' +
+          'Sie haben 60 Sekunden pro Frage. ' +
+          'Tippen Sie auf die richtige Antwort. ' +
+          'Mit 50:50 werden zwei falsche Antworten entfernt. ' +
+          'Der Publikumsjoker zeigt die Abstimmung im Studio. ' +
+          'Mit plus Zeit bekommen Sie zehn Sekunden extra. ' +
+          'Viel Erfolg!'
+        );
+
+        toast('Anleitung wird vorgelesen.');
+      });
+
+      $('btnMusicStart').addEventListener('click', toggleMusic);
+      $('btnMusic').addEventListener('click', toggleMusic);
+
+      $('btnFontMinusStart').addEventListener('click', function () {
+        changeFont(-2);
+      });
+
+      $('btnFontPlusStart').addEventListener('click', function () {
+        changeFont(2);
+      });
+
+      $('btnFontMinus').addEventListener('click', function () {
+        changeFont(-2);
+      });
+
+      $('btnFontPlus').addEventListener('click', function () {
+        changeFont(2);
+      });
+
+      $('btnPause').addEventListener('click', togglePause);
+      $('btnQuit').addEventListener('click', quitGame);
+
+      $('j5050').addEventListener('click', useFifty);
+      $('jHint').addEventListener('click', useHint);
+      $('jTime').addEventListener('click', useTimeBonus);
+
+      $('btnRestart').addEventListener('click', function () {
+        ensureAudio();
+        startRun();
+      });
+
+      $('btnHome').addEventListener('click', function () {
+        sfxClick();
+        showScreen('startScreen');
+        updateButtons();
+      });
+
+      $('questionCard').addEventListener('click', function () {
+        if (!$('gameScreen').hidden && run.question) {
+          speakQuestion();
+        }
+      });
+
+      document.addEventListener('keydown', onKeydown);
+    }
+
+    function speakQuestion() {
+      if (!run.question) return;
+
+      const q = run.question;
+
+      let text =
+        'Frage ' + (run.qIndex + 1) + '. ' +
+        q.clue + ' ';
+
+      q.options.forEach(function (opt, i) {
+        text += LETTERS[i] + ': ' + opt + '. ';
+      });
+
+      speak(text);
+    }
+
+    function onKeydown(e) {
+      if (e.target && e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) {
+        return;
+      }
+
+      if (!$('startScreen').hidden && e.key === 'Enter') {
+        e.preventDefault();
+        ensureAudio();
+        startRun();
+        return;
+      }
+
+      if (!$('endScreen').hidden && e.key === 'Enter') {
+        e.preventDefault();
+        ensureAudio();
+        startRun();
+        return;
+      }
+
+      if (!$('gameScreen').hidden) {
+        if (!run.active || run.locked || run.paused) return;
+
+        if (e.key === '1' || e.key.toLowerCase() === 'a') {
+          e.preventDefault();
+          selectAnswer(0);
+        }
+
+        if (e.key === '2' || e.key.toLowerCase() === 'b') {
+          e.preventDefault();
+          selectAnswer(1);
+        }
+
+        if (e.key === '3' || e.key.toLowerCase() === 'c') {
+          e.preventDefault();
+          selectAnswer(2);
+        }
+
+        if (e.key === '4' || e.key.toLowerCase() === 'd') {
+          e.preventDefault();
+          selectAnswer(3);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
