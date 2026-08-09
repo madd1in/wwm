@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#05041a">
+  <title>Die Millionenfrage</title>
+
+  <style>
+    [hidden] {
+      display: none !important;
+    }
+
+    :root {
+      color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: 32px;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      font-family: Verdana, Arial, sans-serif;
+      line-height: 1.25;
+      user-select: none;
+      background: #000;
+      color: #ffd700;
+    }
+
+    body.gameActive {
+      overflow: hidden;
+    }
+
+    button {
+      font: inherit;
+      font-weight: 900;
+      font-size: 1.35rem;
+      min-height: 4.5rem;
+      padding: 0.7rem;
+      border-radius: 1.2rem;
+      border: 4px solid #ffd700;
+      background: #111;
+      color: #ffd700;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:focus-visible {
+      outline: 6px solid #fff;
+      outline-offset: 3px;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.35;
+    }
+
+    .primary {
+      background: #ffd700;
+      color: #000;
+    }
+
+    .screen {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+      animation: screenIn 0.3s ease;
+    }
+
+    @keyframes screenIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .hero,
+    .endBox {
+      width: min(100%, 820px);
+      padding: 1.2rem;
+      text-align: center;
+      display: grid;
+      gap: 1rem;
+      background: #111;
+      border: 5px solid #ffd700;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      margin: 0;
+    }
+
+    .subtitle {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .startOptions {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    @media (min-width: 700px) {
+      .startOptions {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    #gameScreen {
+      height: 100vh;
+      height: 100dvh;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding:
+        0.7rem
+        0.7rem
+        calc(5.5rem + env(safe-area-inset-bottom))
+        0.7rem;
+      display: grid;
+      grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+      gap: 0.7rem;
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.6rem;
+      align-items: center;
+      background: #111;
+      border: 4px solid #ffd700;
+      border-radius: 1.2rem;
+      padding: 0.6rem;
+    }
+
+    .topButtons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .iconBtn {
+      min-width: 3.4rem;
+      min-height: 3.4rem;
+      font-size: 1.5rem;
+      border-radius: 1rem;
+      padding: 0;
+    }
+
+    .statusRow {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 0.6rem;
+      align-items: center;
+      font-weight: 900;
+      font-size: 1.25rem;
+    }
+
+    .timerBox {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    #timerWrap {
+      height: 1.3rem;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #222;
+      border: 3px solid #ffd700;
+    }
+
+    #timerFill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #22c55e, #84cc16);
+      transition: width 0.1s linear;
+    }
+
+    #timerFill.low {
+      background: linear-gradient(90deg, #ef4444, #f97316);
+    }
+
+    #timerText {
+      min-width: 3.2rem;
+      text-align: center;
+      font-size: 1.35rem;
+    }
+
+    #notice {
+      padding: 0.7rem;
+      border-radius: 1rem;
+      border: 3px solid #ffd700;
+      background: #111;
+      font-weight: 900;
+      text-align: center;
+      font-size: 1.25rem;
+      animation: screenIn 0.2s ease;
+      pointer-events: none;
+    }
+
+    #questionCard {
+      background: #111;
+      border: 5px solid #ffd700;
+      border-radius: 1.4rem;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.8rem;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 16px 44px rgba(0, 0, 0, 0.4);
+    }
+
+    #qEmoji {
+      font-size: 3rem;
+      line-height: 1;
+    }
+
+    #qText {
+      font-size: clamp(1.7rem, 6vw, 2.7rem);
+      font-weight: 900;
+    }
+
+    #bossBadge {
+      width: fit-content;
+      font-size: 1.1rem;
+      font-weight: 900;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      background: #ffd700;
+      color: #000;
+      border: 3px solid #fff;
+    }
+
+    .questionTextWrap {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    #answers {
+      display: grid;
+      gap: 0.7rem;
+      min-height: 0;
+    }
+
+    .answer {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.7rem;
+      align-items: center;
+      text-align: left;
+      padding: 0.7rem 0.8rem;
+      min-height: 4.8rem;
+      border-radius: 1.2rem;
+      border: 4px solid #ffd700;
+      background: #111;
+      color: #ffd700;
+      font-size: clamp(1.35rem, 5vw, 2.1rem);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .answer .letter {
+      width: 2.8rem;
+      height: 2.8rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: #ffd700;
+      color: #000;
+    }
+
+    .answer.selected {
+      background: #ffd700;
+      color: #000;
+    }
+
+    .answer.selected .letter {
+      background: #fff;
+      color: #000;
+    }
+
+    .answer.correct {
+      background: #22c55e;
+      border-color: #dcfce7;
+      color: #052e16;
+    }
+
+    .answer.wrong {
+      background: #ef4444;
+      border-color: #fecaca;
+      color: #fff;
+    }
+
+    .answer.disabled {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .answer.hint {
+      outline: 6px solid #fff;
+      animation: pulseHint 0.8s infinite alternate;
+    }
+
+    @keyframes pulseHint {
+      from {
+        box-shadow: 0 0 10px #fff;
+      }
+      to {
+        box-shadow: 0 0 30px #fff;
+      }
+    }
+
+    #jokers {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.7rem;
+    }
+
+    .joker {
+      min-height: 4.6rem;
+      font-size: 1.3rem;
+    }
+
+    .joker.used {
+      text-decoration: line-through;
+      opacity: 0.35;
+    }
+
+    #endAmount {
+      font-size: 3rem;
+      font-weight: 900;
+      color: #ffd700;
+    }
+
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(5.8rem + env(safe-area-inset-bottom));
+      transform: translateX(-50%) translateY(220%);
+      z-index: 90;
+      max-width: min(94vw, 700px);
+      padding: 0.8rem 1rem;
+      border-radius: 1.2rem;
+      border: 4px solid #ffd700;
+      background: #111;
+      color: #ffd700;
+      font-weight: 900;
+      font-size: 1.2rem;
+      transition: transform 0.28s ease;
+      text-align: center;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 70;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -2rem;
+      border-radius: 22%;
+      opacity: 0.96;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(112vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    #dangerVignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 64;
+      opacity: 0;
+      background: radial-gradient(circle, transparent 55%, rgba(239, 68, 68, 0.3));
+      transition: opacity 0.3s;
+    }
+
+    body.timeDanger #dangerVignette {
+      opacity: 1;
+      animation: dangerPulse 0.75s infinite alternate;
+    }
+
+    @keyframes dangerPulse {
+      from {
+        opacity: 0.55;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* =====================================================
+       QUIZSHOW-STUDIO — eigenständiger Look, inspiriert von
+       großen Prime-Time-Wissensshows
+    ===================================================== */
+
+    :root {
+      --night: #05041a;
+      --navy: #09083a;
+      --blue: #1729a6;
+      --violet: #5b2ee8;
+      --electric: #6877ff;
+      --gold: #f4b942;
+      --gold-light: #ffe59a;
+      --cyan: #91e8ff;
+      --panel: rgba(7, 8, 43, 0.94);
+    }
+
+    body {
+      font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+      color: #fff;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(93, 65, 255, 0.32) 0 14%, transparent 38%),
+        radial-gradient(ellipse at 12% 12%, rgba(49, 83, 255, 0.26), transparent 35%),
+        radial-gradient(ellipse at 88% 18%, rgba(154, 44, 255, 0.2), transparent 35%),
+        linear-gradient(155deg, #020313 0%, var(--night) 48%, #090333 100%);
+      background-attachment: fixed;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -35vmax;
+      z-index: -1;
+      pointer-events: none;
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(92, 111, 255, 0.08) 0deg 2deg,
+        transparent 2deg 15deg
+      );
+      animation: studioSweep 55s linear infinite;
+    }
+
+    body::after {
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 44%, transparent 0 20%, rgba(5, 4, 26, 0.52) 62%, rgba(1, 1, 10, 0.94) 100%),
+        repeating-linear-gradient(90deg, transparent 0 78px, rgba(139, 151, 255, 0.025) 79px 80px);
+      animation: none;
+    }
+
+    @keyframes studioSweep {
+      to { transform: rotate(360deg); }
+    }
+
+    button {
+      color: #f7f7ff;
+      border: 2px solid rgba(159, 176, 255, 0.82);
+      background:
+        linear-gradient(180deg, rgba(37, 46, 130, 0.96), rgba(8, 10, 53, 0.98));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 0 0 1px rgba(20, 28, 110, 0.8),
+        0 12px 30px rgba(0, 0, 0, 0.35);
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      border-color: var(--gold-light);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.24),
+        0 0 22px rgba(104, 119, 255, 0.45),
+        0 14px 34px rgba(0, 0, 0, 0.42);
+    }
+
+    button:focus-visible {
+      outline: 4px solid var(--cyan);
+      outline-offset: 4px;
+    }
+
+    .primary {
+      color: #120b00;
+      border-color: #fff1bc;
+      background: linear-gradient(180deg, #ffe995 0%, var(--gold) 48%, #c8790c 100%);
+      text-shadow: 0 1px rgba(255, 255, 255, 0.45);
+      box-shadow: 0 0 30px rgba(244, 185, 66, 0.38), 0 14px 30px rgba(0, 0, 0, 0.42);
+    }
+
+    .screen {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero,
+    .endBox {
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      border: 2px solid rgba(193, 206, 255, 0.9);
+      border-radius: 2rem;
+      background:
+        radial-gradient(circle at 50% 5%, rgba(102, 76, 255, 0.42), transparent 45%),
+        linear-gradient(160deg, rgba(17, 22, 89, 0.98), rgba(4, 5, 35, 0.98));
+      box-shadow:
+        0 0 0 6px rgba(44, 50, 156, 0.28),
+        0 0 70px rgba(91, 46, 232, 0.4),
+        0 30px 80px rgba(0, 0, 0, 0.62);
+    }
+
+    .hero::before,
+    .hero::after,
+    .endBox::before,
+    .endBox::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 23rem;
+      height: 23rem;
+      border: 1px solid rgba(176, 192, 255, 0.19);
+      border-radius: 50%;
+      transform: translate(-50%, -55%);
+      z-index: -1;
+      box-shadow: 0 0 0 2rem rgba(95, 72, 255, 0.06), 0 0 0 5rem rgba(95, 72, 255, 0.035);
+    }
+
+    .hero::after,
+    .endBox::after {
+      top: auto;
+      bottom: -9rem;
+      width: 16rem;
+      height: 16rem;
+      transform: translateX(-50%);
+    }
+
+    .brandMark {
+      width: 7.2rem;
+      aspect-ratio: 1;
+      margin: 0 auto -0.2rem;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--gold-light);
+      border-radius: 50%;
+      background:
+        repeating-conic-gradient(from 12deg, rgba(255,255,255,.26) 0 2deg, transparent 2deg 18deg),
+        radial-gradient(circle, #241b82 0 42%, #0a0d53 43% 63%, #5865ed 64% 66%, #06062f 67%);
+      box-shadow: 0 0 35px rgba(104, 119, 255, 0.72), inset 0 0 24px rgba(0, 0, 0, 0.65);
+      transform: rotate(-5deg);
+    }
+
+    .brandMark span {
+      max-width: 5.2rem;
+      color: #fff;
+      font-size: 0.76rem;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px #6ddcff, 0 2px 1px #000;
+      transform: rotate(5deg);
+    }
+
+    h1 {
+      color: #fff;
+      font-size: clamp(2rem, 8vw, 3.1rem);
+      line-height: 0.98;
+      letter-spacing: -0.045em;
+      text-shadow: 0 0 24px rgba(127, 151, 255, 0.72), 0 4px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .subtitle {
+      color: #dfe5ff;
+      letter-spacing: 0.035em;
+    }
+
+    #gameScreen {
+      width: min(100%, 1050px);
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      border: 1px solid rgba(145, 169, 255, 0.78);
+      background: linear-gradient(90deg, rgba(9, 10, 54, 0.97), rgba(24, 24, 105, 0.94), rgba(9, 10, 54, 0.97));
+      box-shadow: 0 0 30px rgba(67, 83, 255, 0.2);
+    }
+
+    .iconBtn {
+      border-radius: 50%;
+    }
+
+    .statusRow {
+      color: #f4f6ff;
+      text-shadow: 0 1px 5px #000;
+    }
+
+    #questionNumber,
+    #score {
+      color: var(--gold-light);
+    }
+
+    #timerWrap {
+      border: 2px solid #758cff;
+      background: rgba(1, 2, 24, 0.95);
+      box-shadow: inset 0 0 12px #000, 0 0 15px rgba(91, 112, 255, 0.38);
+    }
+
+    #timerFill {
+      background: linear-gradient(90deg, #3c5cff, #9b63ff, #c4f7ff);
+      box-shadow: 0 0 14px #8ba5ff;
+    }
+
+    #notice {
+      color: #171000;
+      border: 2px solid #fff1bd;
+      background: linear-gradient(180deg, #ffec9f, var(--gold));
+      box-shadow: 0 0 28px rgba(244, 185, 66, 0.42);
+    }
+
+    #questionCard {
+      position: relative;
+      color: #fff;
+      border: 2px solid #9cabff;
+      border-radius: 0.65rem;
+      background:
+        linear-gradient(90deg, rgba(5, 6, 40, 0.98), rgba(25, 28, 111, 0.98) 50%, rgba(5, 6, 40, 0.98));
+      clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+      box-shadow: inset 0 0 28px rgba(67, 89, 255, 0.19), 0 18px 42px rgba(0, 0, 0, 0.5);
+    }
+
+    #qEmoji {
+      filter: drop-shadow(0 0 12px rgba(120, 167, 255, 0.8));
+    }
+
+    #qText {
+      color: #fff;
+      font-size: clamp(1.35rem, 5vw, 2.25rem);
+      line-height: 1.12;
+      text-shadow: 0 2px 2px #000;
+    }
+
+    #bossBadge {
+      color: #1d1100;
+      border: 1px solid #fff5ca;
+      background: linear-gradient(180deg, #fff0ab, var(--gold));
+      box-shadow: 0 0 15px rgba(244, 185, 66, 0.45);
+    }
+
+    .answer {
+      position: relative;
+      color: #fff;
+      min-height: 4.35rem;
+      border: 2px solid #7186ff;
+      border-radius: 0.45rem;
+      background:
+        linear-gradient(105deg, rgba(4, 5, 34, 0.99), rgba(21, 22, 91, 0.98) 55%, rgba(7, 8, 48, 0.99));
+      clip-path: polygon(5% 0, 95% 0, 100% 50%, 95% 100%, 5% 100%, 0 50%);
+      text-shadow: 0 2px 2px #000;
+    }
+
+    .answer > span:last-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      hyphens: auto;
+    }
+
+    .answer:hover:not(:disabled) {
+      background: linear-gradient(105deg, #10165f, #303fc4 55%, #111966);
+    }
+
+    .answer .letter {
+      color: #180d00;
+      background: linear-gradient(180deg, #ffe8a0, var(--gold));
+      box-shadow: 0 0 12px rgba(244, 185, 66, 0.42);
+    }
+
+    .answer.selected {
+      color: #140c00;
+      border-color: #fff0b5;
+      background: linear-gradient(100deg, #d77c08, #ffd44b 52%, #d77c08);
+      text-shadow: none;
+      animation: lockPulse 0.72s ease-in-out infinite alternate;
+    }
+
+    @keyframes lockPulse {
+      to { filter: brightness(1.18); box-shadow: 0 0 32px rgba(255, 190, 45, 0.72); }
+    }
+
+    .answer.correct {
+      color: #00170a;
+      border-color: #c9ffe1;
+      background: linear-gradient(100deg, #049748, #42f58a 52%, #049748);
+      text-shadow: none;
+    }
+
+    .answer.wrong {
+      color: #fff;
+      border-color: #ffb7bd;
+      background: linear-gradient(100deg, #8f1024, #ed3148 52%, #8f1024);
+    }
+
+    #jokers {
+      padding-top: 0.2rem;
+    }
+
+    .joker {
+      color: #fff;
+      border-color: #8ba0ff;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 25%, #3846c7, #11105f 68%, #070630);
+      box-shadow: inset 0 0 18px rgba(118, 144, 255, 0.24), 0 0 18px rgba(65, 78, 238, 0.2);
+    }
+
+    .joker.used {
+      color: #8a8da8;
+      border-color: #3a3c62;
+      background: #101126;
+    }
+
+    #moneyLadder {
+      display: none;
+    }
+
+    #endAmount {
+      color: var(--gold-light);
+      text-shadow: 0 0 25px rgba(244, 185, 66, 0.72);
+    }
+
+    #toast {
+      color: #fff;
+      border-color: #879bff;
+      background: rgba(7, 8, 49, 0.97);
+      box-shadow: 0 0 28px rgba(89, 101, 255, 0.35);
+    }
+
+    @media (min-width: 900px) {
+      #startScreen {
+        padding: 0.55rem;
+      }
+
+      .hero {
+        width: min(100%, 880px);
+        padding: 0.65rem 1rem;
+        gap: 0.45rem;
+      }
+
+      .hero .brandMark {
+        width: 4rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.65rem, 4.2vw, 2.15rem);
+        line-height: 1;
+      }
+
+      .hero .subtitle {
+        margin: 0.15rem 0;
+        font-size: 0.9rem;
+        line-height: 1.15;
+      }
+
+      .hero #btnStart {
+        min-height: 2.35rem;
+        padding: 0.35rem 0.7rem;
+        font-size: 1rem;
+      }
+
+      .hero .startOptions {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.4rem;
+      }
+
+      .hero .startOptions button {
+        min-height: 2.15rem;
+        padding: 0.3rem 0.4rem;
+        font-size: 0.72rem;
+        line-height: 1.1;
+      }
+
+      #gameScreen {
+        grid-template-rows: repeat(6, auto);
+        align-content: start;
+        gap: 0.38rem;
+        padding-top: 0.4rem;
+        padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
+      }
+
+      .topbar {
+        min-height: 0;
+        padding: 0.25rem 0.45rem;
+      }
+
+      .iconBtn {
+        min-width: 2.25rem;
+        min-height: 2.25rem;
+        font-size: 1rem;
+      }
+
+      .statusRow {
+        min-height: 0;
+        font-size: 0.88rem;
+      }
+
+      #timerWrap {
+        height: 0.85rem;
+      }
+
+      #timerText {
+        min-width: 2.4rem;
+        font-size: 1rem;
+      }
+
+      #questionCard {
+        min-height: 0;
+        padding: 0.5rem 0.9rem;
+      }
+
+      #qEmoji {
+        font-size: 2rem;
+      }
+
+      #answers {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: auto;
+        min-height: auto;
+        gap: 0.38rem;
+      }
+
+      #qText {
+        font-size: clamp(1.05rem, 2.25vw, 1.42rem);
+      }
+
+      .answer {
+        min-height: 2.75rem;
+        padding: 0.32rem 0.65rem;
+        gap: 0.45rem;
+        font-size: clamp(0.88rem, 1.75vw, 1.08rem);
+      }
+
+      .answer .letter {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1rem;
+      }
+
+      #jokers {
+        min-height: 2.55rem;
+        gap: 0.4rem;
+      }
+
+      .joker {
+        min-height: 2.55rem;
+        padding: 0.28rem 0.5rem;
+        font-size: 0.88rem;
+      }
+
+      #toast {
+        bottom: 0.5rem;
+        padding: 0.35rem 0.65rem;
+        border-width: 2px;
+        font-size: 0.78rem;
+      }
+    }
+
+    @media (min-width: 1180px) {
+      #gameScreen {
+        width: min(calc(100% - 2rem), 1320px);
+        grid-template-columns: minmax(0, 1fr) 9rem;
+        grid-template-rows: repeat(6, auto);
+        column-gap: 0.65rem;
+        transform: none;
+      }
+
+      #gameScreen > :not(#moneyLadder) {
+        grid-column: 1;
+      }
+
+      #moneyLadder {
+        position: static;
+        grid-column: 2;
+        grid-row: 1 / -1;
+        align-self: center;
+        z-index: 1;
+        width: 100%;
+        max-height: calc(100dvh - 2rem);
+        display: grid;
+        gap: 0.1rem;
+        padding: 0.5rem;
+        overflow: auto;
+        border: 1px solid rgba(126, 148, 255, 0.65);
+        border-radius: 1rem;
+        background: rgba(5, 6, 39, 0.93);
+        box-shadow: 0 0 42px rgba(54, 72, 234, 0.28), 0 18px 50px rgba(0,0,0,.5);
+        transform: none;
+        backdrop-filter: blur(12px);
+      }
+
+      .moneyStep {
+        display: grid;
+        grid-template-columns: 1.45rem 1fr;
+        gap: .2rem;
+        align-items: center;
+        padding: .1rem .25rem;
+        border-radius: 999px;
+        color: #aeb8f8;
+        font-size: .56rem;
+        font-weight: 900;
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .moneyStep span:first-child {
+        color: #6f7cce;
+      }
+
+      .moneyStep.safe {
+        color: var(--gold-light);
+      }
+
+      .moneyStep.current {
+        color: #1a1000;
+        background: linear-gradient(90deg, #d88912, #ffe07b);
+        box-shadow: 0 0 15px rgba(244, 185, 66, .45);
+      }
+
+      .moneyStep.current span:first-child {
+        color: #492800;
+      }
+
+      .moneyStep.passed {
+        color: #d7dcff;
+      }
+    }
+
+    @media (min-width: 1180px) and (max-height: 760px) {
+      #gameScreen {
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+        gap: 0.4rem;
+      }
+
+      #moneyLadder {
+        padding-block: 0.3rem;
+      }
+
+      .moneyStep {
+        padding-block: 0.03rem;
+        font-size: 0.5rem;
+      }
+
+      .topbar {
+        padding: 0.35rem 0.5rem;
+      }
+
+      .iconBtn {
+        min-width: 2.05rem;
+        min-height: 2.05rem;
+        font-size: 0.9rem;
+      }
+
+      #questionCard {
+        padding-block: 0.4rem;
+      }
+
+      .answer {
+        min-height: 2.45rem;
+      }
+
+      .joker {
+        min-height: 2.3rem;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .hero,
+      .endBox {
+        padding: 1rem .75rem;
+      }
+
+      .brandMark {
+        width: 5.6rem;
+      }
+
+      #questionCard {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-inline: 1.3rem;
+      }
+
+      #qEmoji {
+        display: none;
+      }
+
+      .answer {
+        padding-inline: 1.1rem;
+      }
+    }
+
+    /* =====================================================
+       MOBILE — VERBESSERTES Layout für bessere Screen-Nutzung
+    ===================================================== */
+
+    @media (max-width: 899px) {
+      html {
+        font-size: 28px;
+      }
+
+      body {
+        min-width: 0;
+        background-attachment: scroll;
+      }
+
+      body::before {
+        inset: -20vmax;
+        animation: none;
+      }
+
+      .screen {
+        width: 100%;
+        min-width: 0;
+        padding:
+          max(0.5rem, env(safe-area-inset-top))
+          max(0.5rem, env(safe-area-inset-right))
+          max(0.5rem, env(safe-area-inset-bottom))
+          max(0.5rem, env(safe-area-inset-left));
+      }
+
+      #startScreen,
+      #endScreen {
+        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow: hidden;
+      }
+
+      .hero,
+      .endBox {
+        width: 100%;
+        min-width: 0;
+        height: calc(100dvh - 1rem);
+        min-height: 0;
+        padding: 0.75rem;
+        gap: 0.5rem;
+        border-radius: 1.25rem;
+        align-content: center;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .hero > *,
+      .endBox > * {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .hero .brandMark,
+      .endBox .brandMark {
+        width: 4.7rem;
+      }
+
+      .brandMark span {
+        font-size: 0.54rem;
+      }
+
+      .hero h1 {
+        max-width: 100%;
+        font-size: clamp(1.75rem, 10vw, 2.25rem);
+        line-height: 1;
+        overflow-wrap: anywhere;
+      }
+
+      .hero .subtitle,
+      .endBox .subtitle {
+        margin: 0.1rem 0;
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+
+      .hero #btnStart,
+      .endBox button {
+        min-height: 3rem;
+        padding: 0.5rem 0.7rem;
+        border-radius: 0.9rem;
+        font-size: 1.15rem;
+      }
+
+      .hero .startOptions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+      }
+
+      .hero .startOptions button {
+        min-width: 0;
+        min-height: 2.85rem;
+        padding: 0.4rem;
+        border-radius: 0.8rem;
+        font-size: 0.9rem;
+        line-height: 1.1;
+        overflow-wrap: anywhere;
+      }
+
+      #gameScreen {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        height: 100vh;
+        height: 100dvh;
+        padding:
+          max(0.35rem, env(safe-area-inset-top))
+          max(0.35rem, env(safe-area-inset-right))
+          max(0.4rem, env(safe-area-inset-bottom))
+          max(0.35rem, env(safe-area-inset-left));
+        gap: 0.4rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scrollbar-gutter: auto;
+      }
+
+      #gameScreen > * {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      .topbar {
+        grid-row: 1;
+        min-height: 0;
+        flex-wrap: nowrap;
+        padding: 0.35rem 0.45rem;
+        border-width: 1px;
+        border-radius: 0.85rem;
+      }
+
+      .topButtons {
+        min-width: 0;
+        gap: 0.35rem;
+      }
+
+      .iconBtn {
+        min-width: 2.5rem;
+        width: 2.5rem;
+        min-height: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        padding: 0;
+        border-width: 1px;
+        font-size: 1.05rem;
+      }
+
+      .statusRow {
+        grid-row: 2;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 0.4rem;
+        min-height: 0;
+        font-size: 0.95rem;
+        line-height: 1;
+      }
+
+      #questionNumber,
+      #score {
+        white-space: nowrap;
+      }
+
+      .timerBox {
+        gap: 0.3rem;
+      }
+
+      #timerWrap {
+        height: 0.85rem;
+        border-width: 1px;
+      }
+
+      #timerText {
+        min-width: 2.2rem;
+        font-size: 0.95rem;
+      }
+
+      #notice {
+        grid-row: 3;
+        padding: 0.4rem 0.6rem;
+        border-width: 1px;
+        border-radius: 0.65rem;
+        font-size: 0.9rem;
+      }
+
+      #questionCard {
+        grid-row: 4;
+        min-height: 0;
+        grid-template-columns: 1fr;
+        padding: 0.7rem 1.1rem;
+        border-width: 1px;
+        text-align: center;
+        clip-path: polygon(2.5% 0, 97.5% 0, 100% 50%, 97.5% 100%, 2.5% 100%, 0 50%);
+      }
+
+      #qEmoji {
+        display: none;
+      }
+
+      #qText {
+        font-size: clamp(1.4rem, 8vw, 1.85rem);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+        hyphens: auto;
+      }
+
+      #bossBadge {
+        margin-inline: auto;
+        font-size: 0.75rem;
+        border-width: 1px;
+      }
+
+      #answers {
+        grid-row: 5;
+        flex: 1 1 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, minmax(3.8rem, 1fr));
+        min-height: 0;
+        height: auto;
+        gap: 0.5rem;
+      }
+
+      .answer {
+        min-width: 0;
+        height: 100%;
+        min-height: 3.8rem;
+        padding: 0.45rem 0.9rem;
+        gap: 0.6rem;
+        border-width: 1px;
+        font-size: 1.25rem;
+        line-height: 1.15;
+        clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
+      }
+
+      .answer:active:not(:disabled),
+      .joker:active:not(:disabled),
+      .iconBtn:active:not(:disabled) {
+        filter: brightness(1.22);
+        transform: scale(0.985);
+      }
+
+      .answer .letter {
+        width: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        font-size: 1.25rem;
+      }
+
+      #jokers {
+        grid-row: 6;
+        position: relative;
+        min-height: 3rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.4rem;
+        padding-top: 0;
+      }
+
+      .joker {
+        min-width: 0;
+        min-height: 3rem;
+        padding: 0.35rem 0.25rem;
+        border-width: 1px;
+        font-size: 0.95rem;
+        line-height: 1.1;
+        overflow-wrap: anywhere;
+      }
+
+      #toast {
+        bottom: calc(0.5rem + env(safe-area-inset-bottom));
+        max-width: calc(100vw - 1rem);
+        padding: 0.4rem 0.6rem;
+        border-width: 1px;
+        border-radius: 0.65rem;
+        font-size: 0.85rem;
+      }
+
+      #endAmount {
+        font-size: 2.25rem;
+      }
+    }
+
+    @media (max-width: 899px) and (orientation: landscape) {
+      .hero {
+        width: min(100%, 760px);
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        padding: 0.5rem 0.7rem;
+        gap: 0.3rem 0.55rem;
+      }
+
+      .hero .brandMark {
+        width: 3.2rem;
+        grid-row: 1 / span 2;
+      }
+
+      .hero .startOptions,
+      .hero #btnStart {
+        grid-column: 1 / -1;
+      }
+
+      .hero h1 {
+        font-size: 1.55rem;
+      }
+
+      .hero .subtitle {
+        font-size: 0.78rem;
+      }
+
+      .hero #btnStart {
+        min-height: 2.15rem;
+      }
+
+      .hero .startOptions {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.3rem;
+      }
+
+      .hero .startOptions button {
+        min-height: 2.05rem;
+        font-size: 0.65rem;
+      }
+
+      #gameScreen {
+        gap: 0.28rem;
+        padding-block: 0.3rem;
+      }
+
+      .topbar {
+        padding-block: 0.2rem;
+      }
+
+      .iconBtn {
+        min-width: 1.9rem;
+        width: 1.9rem;
+        min-height: 1.9rem;
+        height: 1.9rem;
+        flex-basis: 1.9rem;
+        font-size: 0.75rem;
+      }
+
+      #questionCard {
+        padding-block: 0.35rem;
+      }
+
+      #qText {
+        font-size: 0.95rem;
+      }
+
+      #answers {
+        flex: 0 0 auto;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(2.15rem, 1fr));
+        min-height: 0;
+        gap: 0.28rem;
+      }
+
+      #jokers {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .answer,
+      .joker {
+        min-height: 2.15rem;
+      }
+
+      .answer {
+        padding-block: 0.2rem;
+        font-size: 0.82rem;
+      }
+
+      .answer .letter {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.8rem;
+      }
+
+      .joker {
+        font-size: 0.68rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      html {
+        font-size: 24px;
+      }
+
+      .hero .brandMark,
+      .endBox .brandMark {
+        width: 4.1rem;
+      }
+
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+
+      .hero .subtitle {
+        font-size: 0.82rem;
+      }
+
+      .statusRow {
+        font-size: 0.75rem;
+      }
+
+      .answer {
+        padding-inline: 0.65rem;
+        font-size: 1.05rem;
+      }
+
+      .joker {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="dangerVignette" aria-hidden="true"></div>
+  <div id="confetti" aria-hidden="true"></div>
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- START -->
+  <section id="startScreen" class="screen">
+    <div class="hero">
+      <div class="brandMark" aria-hidden="true"><span>Die<br>Millionen&shy;frage</span></div>
+      <h1>Die Millionenfrage</h1>
+      <p class="subtitle">15 Fragen · 3 Joker · 1.000.000 €</p>
+
+      <button id="btnStart" class="primary" type="button">Start</button>
+
+      <div class="startOptions">
+        <button id="btnIntro" type="button">Anleitung hören</button>
+        <button id="btnMusicStart" type="button">Musik: an</button>
+        <button id="btnFontMinusStart" type="button">A− kleiner</button>
+        <button id="btnFontPlusStart" type="button">A＋ größer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPIEL -->
+  <section id="gameScreen" hidden>
+
+    <div class="topbar">
+      <div class="topButtons">
+        <button id="btnFontMinus" class="iconBtn" type="button" aria-label="Schrift kleiner">A−</button>
+        <button id="btnFontPlus" class="iconBtn" type="button" aria-label="Schrift größer">A＋</button>
+      </div>
+
+      <div class="topButtons">
+        <button id="btnPause" class="iconBtn" type="button" aria-label="Pause">⏸️</button>
+        <button id="btnMusic" class="iconBtn" type="button" aria-label="Musik">🎵</button>
+        <button id="btnQuit" class="iconBtn" type="button" aria-label="Zur Startseite">🏠</button>
+      </div>
+    </div>
+
+    <div class="statusRow">
+      <div id="questionNumber">Frage 1/15</div>
+
+      <div class="timerBox">
+        <div id="timerWrap">
+          <div id="timerFill"></div>
+        </div>
+        <div id="timerText">60s</div>
+      </div>
+
+      <div id="score">0</div>
+    </div>
+
+    <div id="notice" hidden></div>
+
+    <div id="questionCard">
+      <div id="qEmoji">❓</div>
+      <div class="questionTextWrap">
+        <div id="bossBadge" hidden>🔒 Sicherheitsstufe</div>
+        <div id="qText">Frage kommt gleich …</div>
+      </div>
+    </div>
+
+    <div id="answers" role="group" aria-label="Antworten"></div>
+
+    <div id="jokers" role="group" aria-label="Joker">
+      <button id="j5050" class="joker" type="button">50:50</button>
+      <button id="jHint" class="joker" type="button">Publikum</button>
+      <button id="jTime" class="joker" type="button">+ Zeit</button>
+    </div>
+
+    <aside id="moneyLadder" aria-label="Gewinnleiter"></aside>
+
+  </section>
+
+  <!-- ENDE -->
+  <section id="endScreen" class="screen" hidden>
+    <div class="endBox">
+      <div class="brandMark" aria-hidden="true"><span>Die<br>Millionen&shy;frage</span></div>
+      <h2 id="endTitle">Super!</h2>
+      <div id="endAmount">0</div>
+      <p class="subtitle" id="endText"></p>
+
+      <button id="btnRestart" class="primary" type="button">Noch einmal</button>
+      <button id="btnHome" type="button">Zur Startseite</button>
+    </div>
+  </section>
+
+  <script>
+    'use strict';
+
+    const QUESTION_LADDER = [
+      [
+        { question: 'Welche Farbe entsteht, wenn man Blau und Rot mischt?', options: ['Grün', 'Violett', 'Orange', 'Braun'], answer: 'Violett', emoji: '🎨', fact: 'Blau und Rot ergeben Violett.' },
+        { question: 'Welche Himmelsrichtung liegt Norden genau gegenüber?', options: ['Osten', 'Westen', 'Süden', 'Nordosten'], answer: 'Süden', emoji: '🧭', fact: 'Süden liegt Norden gegenüber.' }
+      ],
+      [
+        { question: 'Wie viele Tage hat ein Schaltjahr?', options: ['364', '365', '366', '367'], answer: '366', emoji: '📅', fact: 'Im Schaltjahr kommt der 29. Februar hinzu.' },
+        { question: 'Wie heißt die Hauptstadt von Österreich?', options: ['Graz', 'Salzburg', 'Innsbruck', 'Wien'], answer: 'Wien', emoji: '🏛️', fact: 'Wien ist Hauptstadt und zugleich ein Bundesland Österreichs.' }
+      ],
+      [
+        { question: 'Welches Tier gilt sprichwörtlich als „König der Tiere"?', options: ['Tiger', 'Elefant', 'Löwe', 'Adler'], answer: 'Löwe', emoji: '🦁', fact: 'Der Löwe trägt diesen Beinamen.' },
+        { question: 'Welches Instrument besitzt Tasten, Saiten und Pedale?', options: ['Flöte', 'Klavier', 'Trompete', 'Akkordeon'], answer: 'Klavier', emoji: '🎹', fact: 'Beim Klavier schlagen Hämmer über die Tasten auf Saiten.' }
+      ],
+      [
+        { question: 'Bei welcher Temperatur kocht Wasser auf Meereshöhe?', options: ['80 °C', '90 °C', '100 °C', '120 °C'], answer: '100 °C', emoji: '🌡️', fact: 'Bei normalem Luftdruck liegt der Siedepunkt bei 100 Grad Celsius.' },
+        { question: 'Wer schrieb „Jim Knopf und Lukas der Lokomotivführer"?', options: ['Erich Kästner', 'Michael Ende', 'Otfried Preußler', 'Cornelia Funke'], answer: 'Michael Ende', emoji: '📚', fact: 'Michael Ende veröffentlichte den Kinderbuchklassiker 1960.' }
+      ],
+      [
+        { question: 'Welcher Planet ist besonders für sein auffälliges Ringsystem bekannt?', options: ['Mars', 'Venus', 'Saturn', 'Merkur'], answer: 'Saturn', emoji: '🪐', fact: 'Auch andere Gasplaneten haben Ringe, doch die des Saturn sind besonders markant.' },
+        { question: 'Was bedeutet die lateinische Redewendung „Carpe diem"?', options: ['Nutze den Tag', 'Die Zeit heilt', 'Lebe und lerne', 'Das Glück ist blind'], answer: 'Nutze den Tag', emoji: '⏳', fact: 'Die Wendung stammt aus einer Ode des römischen Dichters Horaz.' }
+      ],
+      [
+        { question: 'Wie heißt die Währung Japans?', options: ['Won', 'Yuan', 'Yen', 'Baht'], answer: 'Yen', emoji: '💴', fact: 'Der Yen ist seit 1871 die japanische Währung.' },
+        { question: 'In welcher Stadt steht das Brandenburger Tor?', options: ['Potsdam', 'Berlin', 'Hamburg', 'Dresden'], answer: 'Berlin', emoji: '🏙️', fact: 'Das Brandenburger Tor steht am Pariser Platz in Berlin.' }
+      ],
+      [
+        { question: 'Für welches chemische Element steht das Symbol „Au"?', options: ['Silber', 'Gold', 'Kupfer', 'Aluminium'], answer: 'Gold', emoji: '⚗️', fact: 'Au leitet sich vom lateinischen „aurum" ab.' },
+        { question: 'Wer malte die „Mona Lisa"?', options: ['Michelangelo', 'Raffael', 'Leonardo da Vinci', 'Sandro Botticelli'], answer: 'Leonardo da Vinci', emoji: '🖼️', fact: 'Leonardo da Vinci malte das berühmte Porträt im frühen 16. Jahrhundert.' }
+      ],
+      [
+        { question: 'Wie heißt die Hauptstadt Australiens?', options: ['Sydney', 'Melbourne', 'Canberra', 'Perth'], answer: 'Canberra', emoji: '🌏', fact: 'Canberra wurde als Kompromiss zwischen Sydney und Melbourne Hauptstadt.' },
+        { question: 'Welcher ist der größte Ozean der Erde?', options: ['Atlantik', 'Indischer Ozean', 'Arktischer Ozean', 'Pazifik'], answer: 'Pazifik', emoji: '🌊', fact: 'Der Pazifik bedeckt etwa ein Drittel der Erdoberfläche.' }
+      ],
+      [
+        { question: 'Welches Organ produziert das Hormon Insulin?', options: ['Leber', 'Bauchspeicheldrüse', 'Milz', 'Schilddrüse'], answer: 'Bauchspeicheldrüse', emoji: '🩺', fact: 'Insulin wird in den Betazellen der Bauchspeicheldrüse gebildet.' },
+        { question: 'In welchem Jahr trat das deutsche Grundgesetz in Kraft?', options: ['1945', '1948', '1949', '1953'], answer: '1949', emoji: '📜', fact: 'Das Grundgesetz trat am 24. Mai 1949 in Kraft.' }
+      ],
+      [
+        { question: 'Welcher ist der längste Fluss Europas?', options: ['Donau', 'Wolga', 'Rhein', 'Dnepr'], answer: 'Wolga', emoji: '🏞️', fact: 'Die Wolga ist mit rund 3.500 Kilometern Europas längster Fluss.' },
+        { question: 'In welchem Gebirge entspringt der Rhein?', options: ['Pyrenäen', 'Karpaten', 'Alpen', 'Apennin'], answer: 'Alpen', emoji: '🏔️', fact: 'Die Quellflüsse des Rheins entspringen in den Schweizer Alpen.' }
+      ],
+      [
+        { question: 'In welchem Jahr wurde der Westfälische Frieden geschlossen?', options: ['1492', '1618', '1648', '1789'], answer: '1648', emoji: '🕊️', fact: 'Die Friedensschlüsse von 1648 beendeten den Dreißigjährigen Krieg.' },
+        { question: 'Titan ist der größte Mond welches Planeten?', options: ['Jupiter', 'Saturn', 'Uranus', 'Neptun'], answer: 'Saturn', emoji: '🔭', fact: 'Titan umkreist Saturn und besitzt eine dichte Atmosphäre.' }
+      ],
+      [
+        { question: 'Welcher ist der kleinste Knochen im menschlichen Körper?', options: ['Steigbügel', 'Hammer', 'Amboss', 'Kniescheibe'], answer: 'Steigbügel', emoji: '🦴', fact: 'Der Steigbügel liegt im Mittelohr und ist nur wenige Millimeter groß.' },
+        { question: 'Wer formulierte die nach ihm benannte Unschärferelation?', options: ['Max Planck', 'Werner Heisenberg', 'Niels Bohr', 'Erwin Schrödinger'], answer: 'Werner Heisenberg', emoji: '⚛️', fact: 'Werner Heisenberg formulierte die Unschärferelation 1927.' }
+      ],
+      [
+        { question: 'Wer malte das Gemälde „Las Meninas"?', options: ['Francisco de Goya', 'El Greco', 'Diego Velázquez', 'Bartolomé Murillo'], answer: 'Diego Velázquez', emoji: '🎭', fact: 'Diego Velázquez vollendete das Werk 1656.' },
+        { question: 'Welche dieser Sprachen gilt als Sprachisolat?', options: ['Katalanisch', 'Baskisch', 'Bretonisch', 'Galicisch'], answer: 'Baskisch', emoji: '🗣️', fact: 'Für das Baskische ist keine Verwandtschaft mit einer anderen lebenden Sprache belegt.' }
+      ],
+      [
+        { question: 'Welches Element hat die Ordnungszahl 74?', options: ['Wolfram', 'Platin', 'Quecksilber', 'Blei'], answer: 'Wolfram', emoji: '🧪', fact: 'Wolfram trägt das Elementsymbol W und die Ordnungszahl 74.' },
+        { question: 'Welche Frau erhielt als erste einen Nobelpreis?', options: ['Bertha von Suttner', 'Marie Curie', 'Selma Lagerlöf', 'Jane Addams'], answer: 'Marie Curie', emoji: '🏅', fact: 'Marie Curie erhielt 1903 gemeinsam mit Pierre Curie und Henri Becquerel den Physik-Nobelpreis.' }
+      ],
+      [
+        { question: 'Wer führte nach Magellans Tod die erste Weltumsegelung zu Ende?', options: ['Hernán Cortés', 'Juan Sebastián Elcano', 'Bartolomeu Dias', 'Amerigo Vespucci'], answer: 'Juan Sebastián Elcano', emoji: '⛵', fact: 'Elcano brachte 1522 das letzte Schiff der Expedition nach Spanien zurück.' },
+        { question: 'Welcher Mathematiker führte das Unendlichkeitszeichen „∞" ein?', options: ['Leonhard Euler', 'Gottfried Wilhelm Leibniz', 'John Wallis', 'Isaac Newton'], answer: 'John Wallis', emoji: '∞️', fact: 'John Wallis verwendete das Zeichen erstmals 1655.' }
+      ]
+    ];
+
+    const MONEY = [
+      '100', '200', '300', '500', '1.000',
+      '2.000', '4.000', '8.000', '16.000', '32.000',
+      '64.000', '125.000', '250.000', '500.000', '1.000.000'
+    ];
+
+    const LETTERS = ['A', 'B', 'C', 'D'];
+    const QUESTION_TIME = 60;
+    const SETTINGS_KEY = 'sprech-raetsel-xl-settings';
+
+    let settings = {
+      fontPx: 32,
+      music: true,
+      sound: true
+    };
+
+    let audioCtx = null;
+    let musicGain = null;
+    let sfxGain = null;
+    let bgmTimer = null;
+    let bgmStep = 0;
+    let bgmMood = -1;
+
+    let run = {
+      answered: 0,
+      qIndex: 0,
+      score: 0,
+      streak: 0,
+      locked: false,
+      active: false,
+      paused: false,
+      pauseReason: null,
+      pendingActivate: false,
+      question: null,
+      timerInterval: null,
+      timeLeft: QUESTION_TIME,
+      timeLimit: QUESTION_TIME,
+      selectTimeLeft: 0,
+      lastTick: 0,
+      jokers: {
+        fifty: false,
+        hint: false,
+        time: false
+      }
+    };
+
+    let startupLock = false;
+    let transitionTimer = null;
+    let noticeTimer = null;
+    let toastTimer = null;
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    function init() {
+      loadSettings();
+      applyFont();
+      buildMoneyLadder();
+      updateButtons();
+      bindButtons();
+      showScreen('startScreen');
+
+      document.addEventListener('visibilitychange', onVisibilityChange);
+      window.addEventListener('resize', applyFont, { passive: true });
+    }
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function buildMoneyLadder() {
+      const ladder = $('moneyLadder');
+      if (!ladder) return;
+
+      ladder.innerHTML = '';
+
+      MONEY.slice().reverse().forEach(function (amount, reverseIndex) {
+        const level = MONEY.length - reverseIndex;
+        const step = document.createElement('div');
+        step.className = 'moneyStep';
+        step.dataset.level = String(level - 1);
+
+        if (level === 5 || level === 10 || level === 15) {
+          step.classList.add('safe');
+        }
+
+        const number = document.createElement('span');
+        number.textContent = level;
+
+        const prize = document.createElement('span');
+        prize.textContent = amount + ' €';
+
+        step.appendChild(number);
+        step.appendChild(prize);
+        ladder.appendChild(step);
+      });
+
+      updateMoneyLadder();
+    }
+
+    function updateMoneyLadder() {
+      const ladder = $('moneyLadder');
+      if (!ladder) return;
+
+      Array.from(ladder.children).forEach(function (step) {
+        const level = Number(step.dataset.level);
+        step.classList.toggle('current', level === run.qIndex);
+        step.classList.toggle('passed', level < run.answered);
+      });
+    }
+
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        if (!raw) return;
+
+        const parsed = JSON.parse(raw);
+
+        if (typeof parsed.fontPx === 'number') settings.fontPx = parsed.fontPx;
+        if (typeof parsed.music === 'boolean') settings.music = parsed.music;
+        if (typeof parsed.sound === 'boolean') settings.sound = parsed.sound;
+      } catch (e) {}
+    }
+
+    function saveSettings() {
+      try {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      } catch (e) {}
+    }
+
+    function applyFont() {
+      let effectivePx = settings.fontPx;
+
+      if (window.innerWidth < 600) {
+        effectivePx = Math.max(24, Math.min(40, Math.round(settings.fontPx * 0.85)));
+      } else if (window.innerWidth < 900) {
+        effectivePx = Math.max(26, Math.min(40, Math.round(settings.fontPx * 0.9)));
+      }
+
+      document.documentElement.style.fontSize = effectivePx + 'px';
+    }
+
+    function changeFont(delta) {
+      settings.fontPx = Math.max(26, Math.min(56, settings.fontPx + delta));
+      applyFont();
+      saveSettings();
+      toast('Schriftgröße geändert');
+      speak('Schriftgröße geändert.');
+    }
+
+    function updateButtons() {
+      $('btnMusicStart').textContent =
+        'Musik: ' + (settings.music ? 'an' : 'aus');
+
+      $('btnMusic').textContent = settings.music ? '🎵' : '🚫';
+    }
+
+    function showScreen(id) {
+      ['startScreen', 'gameScreen', 'endScreen'].forEach(function (s) {
+        const el = $(s);
+        if (!el) return;
+
+        if (s === id) {
+          el.hidden = false;
+          el.style.display = '';
+        } else {
+          el.hidden = true;
+          el.style.display = 'none';
+        }
+      });
+
+      document.body.classList.toggle('gameActive', id === 'gameScreen');
+      window.scrollTo(0, 0);
+    }
+
+    function toast(text) {
+      const t = $('toast');
+      if (!t) return;
+
+      t.textContent = text;
+      t.classList.remove('show');
+      void t.offsetWidth;
+      t.classList.add('show');
+
+      if (toastTimer) clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(function () {
+        t.classList.remove('show');
+      }, 2800);
+    }
+
+    function showNotice(text) {
+      const n = $('notice');
+      if (!n) return;
+
+      n.textContent = text;
+      n.hidden = false;
+
+      if (noticeTimer) clearTimeout(noticeTimer);
+
+      noticeTimer = setTimeout(function () {
+        n.hidden = true;
+      }, 1600);
+    }
+
+    function confetti(count) {
+      const container = $('confetti');
+      if (!container) return;
+
+      const colors = ['#ffd700', '#60a5fa', '#4ade80', '#fb7185', '#ffffff'];
+
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('i');
+        piece.className = 'confetti-piece';
+
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.width = (0.45 + Math.random() * 0.7) + 'rem';
+        piece.style.height = (0.75 + Math.random() * 1.0) + 'rem';
+        piece.style.animationDuration = (2.1 + Math.random() * 2.3) + 's';
+        piece.style.animationDelay = (Math.random() * 0.3) + 's';
+
+        container.appendChild(piece);
+
+        setTimeout(function () {
+          piece.remove();
+        }, 5200);
+      }
+    }
+
+    function ensureAudio() {
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+
+        if (!audioCtx) {
+          audioCtx = new AC();
+
+          musicGain = audioCtx.createGain();
+          musicGain.gain.value = 0.18;
+          musicGain.connect(audioCtx.destination);
+
+          sfxGain = audioCtx.createGain();
+          sfxGain.gain.value = 0.5;
+          sfxGain.connect(audioCtx.destination);
+        }
+
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(function () {});
+        }
+      } catch (e) {}
+    }
+
+    function musicTone(freq, dur, type, gain, delay) {
+      if (!audioCtx || !musicGain) return;
+
+      const t = audioCtx.currentTime + (delay || 0);
+
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(Math.max(260, freq * 5), t);
+      filter.Q.value = 1.4;
+
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(gain, t + 0.035);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+      osc.connect(filter);
+      filter.connect(g);
+      g.connect(musicGain);
+
+      osc.start(t);
+      osc.stop(t + dur + 0.06);
+    }
+
+    function musicChord(root, dur, gain) {
+      [1, 1.5, 2, 2.25].forEach(function (ratio, i) {
+        musicTone(root * ratio, dur, i === 0 ? 'triangle' : 'sine', gain / (i + 1), i * 0.018);
+      });
+    }
+
+    function sfxTone(freq, dur, type, gain) {
+      if (!settings.sound || !audioCtx || !sfxGain) return;
+
+      const t = audioCtx.currentTime;
+
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+
+      osc.type = type || 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(gain, t + 0.018);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+      osc.connect(g);
+      g.connect(sfxGain);
+
+      osc.start(t);
+      osc.stop(t + dur + 0.06);
+    }
+
+    function sfxClick() {
+      sfxTone(660, 0.06, 'triangle', 0.055);
+    }
+
+    function haptic(pattern) {
+      try {
+        if ('vibrate' in navigator) {
+          navigator.vibrate(pattern);
+        }
+      } catch (e) {}
+    }
+
+    function sfxSweep(from, to, dur, gain) {
+      if (!settings.sound || !audioCtx || !sfxGain) return;
+
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const g = audioCtx.createGain();
+
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(from, t);
+      osc.frequency.exponentialRampToValueAtTime(to, t + dur);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(420, t);
+      filter.frequency.exponentialRampToValueAtTime(2400, t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(gain, t + 0.08);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+      osc.connect(filter);
+      filter.connect(g);
+      g.connect(sfxGain);
+      osc.start(t);
+      osc.stop(t + dur + 0.04);
+    }
+
+    function sfxSuspense() {
+      sfxSweep(92, 310, 0.82, 0.045);
+      sfxTone(110, 0.85, 'triangle', 0.04);
+      setTimeout(function () { sfxTone(329.63, 0.18, 'sine', 0.035); }, 520);
+    }
+
+    function sfxCorrect() {
+      sfxTone(392, 0.2, 'triangle', 0.07);
+      setTimeout(function () { sfxTone(523.25, 0.22, 'triangle', 0.075); }, 95);
+      setTimeout(function () { sfxTone(659.25, 0.25, 'triangle', 0.08); }, 190);
+      setTimeout(function () { sfxTone(987.77, 0.55, 'sine', 0.075); }, 285);
+    }
+
+    function sfxWrong() {
+      sfxSweep(180, 58, 0.8, 0.055);
+      sfxTone(116.54, 0.72, 'sawtooth', 0.045);
+      setTimeout(function () { sfxTone(77.78, 0.62, 'triangle', 0.06); }, 180);
+    }
+
+    function startBGM() {
+      if (!settings.music) return;
+
+      ensureAudio();
+
+      if (!audioCtx) return;
+
+      const mood = Math.min(2, Math.floor(run.qIndex / 5));
+      if (bgmTimer && bgmMood === mood) return;
+
+      stopBGM();
+
+      bgmStep = 0;
+      bgmMood = mood;
+
+      const tempos = [640, 500, 390];
+      const rootsByMood = [
+        [65.41, 58.27, 61.74, 55],
+        [58.27, 51.91, 55, 49],
+        [51.91, 46.25, 49, 43.65]
+      ];
+      const tempo = tempos[mood];
+      const roots = rootsByMood[mood];
+
+      bgmTimer = setInterval(function () {
+        bgmStep++;
+
+        const root = roots[Math.floor(bgmStep / 8) % roots.length];
+        const danger = run.timeLimit > 0 && run.timeLeft / run.timeLimit < 0.28;
+
+        musicTone(root, tempo / 1000 * 0.72, 'triangle', mood === 2 ? 0.19 : 0.15);
+
+        if (bgmStep % 2 === 0) {
+          musicTone(root * 2, 0.11, 'square', 0.025 + mood * 0.008);
+        }
+
+        if (bgmStep % 8 === 1) {
+          musicChord(root * 2, tempo / 1000 * 3.2, 0.045 + mood * 0.012);
+        }
+
+        if (mood > 0 && bgmStep % 4 === 3) {
+          musicTone(root * 4.5, 0.16, 'sine', 0.018 + mood * 0.009);
+        }
+
+        if (danger) {
+          musicTone(880, 0.045, 'square', 0.035);
+        }
+      }, tempo);
+    }
+
+    function stopBGM() {
+      if (bgmTimer) {
+        clearInterval(bgmTimer);
+        bgmTimer = null;
+      }
+
+      bgmMood = -1;
+    }
+
+    function toggleMusic() {
+      settings.music = !settings.music;
+      saveSettings();
+      updateButtons();
+
+      if (settings.music && !$('gameScreen').hidden && !run.paused) {
+        startBGM();
+        toast('🎵 Musik an');
+      } else {
+        stopBGM();
+        toast('🚫 Musik aus');
+      }
+    }
+
+    function speak(text) {
+      if (!settings.sound) return;
+      if (!('speechSynthesis' in window)) return;
+
+      try {
+        window.speechSynthesis.cancel();
+
+        const u = new SpeechSynthesisUt
