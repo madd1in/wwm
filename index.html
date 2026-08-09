@@ -13,6 +13,7 @@
 
     :root {
       color-scheme: dark;
+      --vh: 1vh;
     }
 
     * {
@@ -20,16 +21,14 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      font-size: 44px;
+    html, body {
+      height: 100%;
+      height: calc(var(--vh, 1vh) * 100);
     }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       font-family: Verdana, Arial, sans-serif;
       line-height: 1.25;
       user-select: none;
@@ -74,12 +73,16 @@
     }
 
     .screen {
-      min-height: 100vh;
-      min-height: 100dvh;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      height: calc(var(--vh, 1vh) * 100);
       display: grid;
       place-items: center;
       padding: 1rem;
       animation: screenIn 0.3s ease;
+      overflow: hidden;
     }
 
     @keyframes screenIn {
@@ -129,19 +132,16 @@
     }
 
     #gameScreen {
-      height: 100vh;
-      height: 100dvh;
-      width: min(100%, 980px);
-      margin: 0 auto;
-      padding:
-        0.7rem
-        0.7rem
-        calc(5.5rem + env(safe-area-inset-bottom))
-        0.7rem;
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      height: calc(var(--vh, 1vh) * 100);
+      padding: 0.7rem;
       display: grid;
       grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
       gap: 0.7rem;
-      overflow: auto;
+      overflow: hidden;
       overscroll-behavior: contain;
     }
 
@@ -519,7 +519,10 @@
     }
 
     .screen {
-      position: relative;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: calc(var(--vh, 1vh) * 100);
       isolation: isolate;
     }
 
@@ -606,8 +609,12 @@
     }
 
     #gameScreen {
-      width: min(100%, 1050px);
-      padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: calc(var(--vh, 1vh) * 100);
+      padding: 0.7rem;
+      overflow: hidden;
     }
 
     .topbar {
@@ -764,6 +771,10 @@
       box-shadow: 0 0 28px rgba(89, 101, 255, 0.35);
     }
 
+    /* =====================================================
+       DESKTOP — KASKADIERENDE ELEMENTE MIT AUTO-FULLSCREEN
+    ===================================================== */
+
     @media (min-width: 900px) {
       #startScreen {
         padding: 0.55rem;
@@ -771,264 +782,251 @@
 
       .hero {
         width: min(100%, 880px);
-        padding: 0.65rem 1rem;
-        gap: 0.45rem;
+        max-height: calc(var(--vh, 1vh) * 100 - 2rem);
+        padding: 0.95rem 1.4rem;
+        gap: 0.7rem;
       }
 
       .hero .brandMark {
-        width: 4rem;
+        width: 5.5rem;
+        transform: rotate(-7deg) translateY(-8px);
       }
 
       .hero h1 {
-        font-size: clamp(1.65rem, 4.2vw, 2.15rem);
+        font-size: clamp(2.4rem, 5.5vw, 3.4rem);
         line-height: 1;
+        transform: rotate(-0.4deg);
       }
 
       .hero .subtitle {
-        margin: 0.15rem 0;
-        font-size: 0.9rem;
+        margin: 0.1rem 0;
+        font-size: 1.15rem;
         line-height: 1.15;
+        transform: rotate(0.3deg);
       }
 
       .hero #btnStart {
-        min-height: 2.35rem;
-        padding: 0.35rem 0.7rem;
-        font-size: 1rem;
+        min-height: 3.5rem;
+        padding: 0.6rem 1.5rem;
+        font-size: 1.35rem;
+        transform: rotate(-0.6deg) translateY(-4px);
       }
 
       .hero .startOptions {
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 0.4rem;
+        gap: 0.55rem;
       }
 
       .hero .startOptions button {
-        min-height: 2.15rem;
-        padding: 0.3rem 0.4rem;
-        font-size: 0.72rem;
+        min-height: 3rem;
+        padding: 0.4rem 0.6rem;
+        font-size: 0.95rem;
         line-height: 1.1;
       }
 
+      .hero .startOptions button:nth-child(1) { transform: rotate(-1deg) translateY(2px); }
+      .hero .startOptions button:nth-child(2) { transform: rotate(0.8deg) translateY(-3px); }
+      .hero .startOptions button:nth-child(3) { transform: rotate(-0.6deg) translateY(1px); }
+      .hero .startOptions button:nth-child(4) { transform: rotate(1.1deg) translateY(-2px); }
+
       #gameScreen {
-        grid-template-rows: repeat(6, auto);
-        align-content: start;
-        gap: 0.38rem;
-        padding-top: 0.4rem;
-        padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
+        grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+        align-content: stretch;
+        gap: 0.5rem;
+        padding: 0.75rem;
       }
 
       .topbar {
         min-height: 0;
-        padding: 0.25rem 0.45rem;
+        padding: 0.4rem 0.65rem;
+        transform: rotate(-0.15deg);
+        z-index: 2;
       }
 
       .iconBtn {
-        min-width: 2.25rem;
-        min-height: 2.25rem;
-        font-size: 1rem;
+        min-width: 3rem;
+        min-height: 3rem;
+        font-size: 1.25rem;
       }
+
+      .iconBtn:nth-child(1) { transform: rotate(-1.5deg); }
+      .iconBtn:nth-child(2) { transform: rotate(1.2deg); }
+      .iconBtn:nth-child(3) { transform: rotate(-0.8deg); }
 
       .statusRow {
         min-height: 0;
-        font-size: 0.88rem;
+        font-size: 1.1rem;
+        transform: rotate(0.2deg);
+        z-index: 2;
       }
 
       #timerWrap {
-        height: 0.85rem;
+        height: 1.2rem;
       }
 
       #timerText {
-        min-width: 2.4rem;
-        font-size: 1rem;
+        min-width: 2.8rem;
+        font-size: 1.2rem;
       }
 
       #questionCard {
         min-height: 0;
-        padding: 0.5rem 0.9rem;
+        padding: 0.85rem 1.3rem;
+        transform: rotate(0.3deg) translateY(-2px);
+        z-index: 2;
       }
 
       #qEmoji {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
 
       #answers {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: auto;
-        min-height: auto;
-        gap: 0.38rem;
+        grid-auto-rows: 1fr;
+        min-height: 0;
+        gap: 0.55rem;
       }
 
       #qText {
-        font-size: clamp(1.05rem, 2.25vw, 1.42rem);
+        font-size: clamp(1.4rem, 3vw, 2rem);
       }
 
       .answer {
-        min-height: 2.75rem;
-        padding: 0.32rem 0.65rem;
-        gap: 0.45rem;
-        font-size: clamp(0.88rem, 1.75vw, 1.08rem);
+        min-height: 0;
+        height: 100%;
+        padding: 0.5rem 1rem;
+        gap: 0.6rem;
+        font-size: clamp(1.1rem, 2.2vw, 1.5rem);
       }
 
+      .answer:nth-child(1) { transform: rotate(-0.5deg) translateX(-4px) translateY(-3px); z-index: 3; }
+      .answer:nth-child(2) { transform: rotate(0.6deg) translateX(5px) translateY(-2px); z-index: 2; }
+      .answer:nth-child(3) { transform: rotate(0.4deg) translateX(-3px) translateY(4px); z-index: 4; }
+      .answer:nth-child(4) { transform: rotate(-0.7deg) translateX(4px) translateY(3px); z-index: 1; }
+
       .answer .letter {
-        width: 2rem;
-        height: 2rem;
-        font-size: 1rem;
+        width: 2.6rem;
+        height: 2.6rem;
+        font-size: 1.2rem;
       }
 
       #jokers {
-        min-height: 2.55rem;
-        gap: 0.4rem;
+        min-height: 0;
+        gap: 0.55rem;
       }
 
       .joker {
-        min-height: 2.55rem;
-        padding: 0.28rem 0.5rem;
-        font-size: 0.88rem;
+        min-height: 3.5rem;
+        padding: 0.4rem 0.8rem;
+        font-size: 1.1rem;
       }
+
+      .joker:nth-child(1) { transform: rotate(-1.3deg) translateY(3px); }
+      .joker:nth-child(2) { transform: rotate(0.5deg) translateY(-2px); }
+      .joker:nth-child(3) { transform: rotate(1.4deg) translateY(2px); }
 
       #toast {
-        bottom: 0.5rem;
-        padding: 0.35rem 0.65rem;
+        bottom: 0.8rem;
+        padding: 0.5rem 0.9rem;
         border-width: 2px;
-        font-size: 0.78rem;
-      }
-    }
-
-    @media (min-width: 1180px) {
-      #gameScreen {
-        width: min(calc(100% - 2rem), 1320px);
-        grid-template-columns: minmax(0, 1fr) 9rem;
-        grid-template-rows: repeat(6, auto);
-        column-gap: 0.65rem;
-        transform: none;
+        font-size: 0.95rem;
       }
 
-      #gameScreen > :not(#moneyLadder) {
-        grid-column: 1;
-      }
-
-      #moneyLadder {
-        position: static;
-        grid-column: 2;
-        grid-row: 1 / -1;
-        align-self: center;
-        z-index: 1;
-        width: 100%;
-        max-height: calc(100dvh - 2rem);
-        display: grid;
-        gap: 0.1rem;
-        padding: 0.5rem;
-        overflow: auto;
-        border: 1px solid rgba(126, 148, 255, 0.65);
-        border-radius: 1rem;
-        background: rgba(5, 6, 39, 0.93);
-        box-shadow: 0 0 42px rgba(54, 72, 234, 0.28), 0 18px 50px rgba(0,0,0,.5);
-        transform: none;
-        backdrop-filter: blur(12px);
-      }
-
-      .moneyStep {
-        display: grid;
-        grid-template-columns: 1.45rem 1fr;
-        gap: .2rem;
-        align-items: center;
-        padding: .1rem .25rem;
-        border-radius: 999px;
-        color: #aeb8f8;
-        font-size: .56rem;
-        font-weight: 900;
-        text-align: right;
-        white-space: nowrap;
-      }
-
-      .moneyStep span:first-child {
-        color: #6f7cce;
-      }
-
-      .moneyStep.safe {
-        color: var(--gold-light);
-      }
-
-      .moneyStep.current {
-        color: #1a1000;
-        background: linear-gradient(90deg, #d88912, #ffe07b);
-        box-shadow: 0 0 15px rgba(244, 185, 66, .45);
-      }
-
-      .moneyStep.current span:first-child {
-        color: #492800;
-      }
-
-      .moneyStep.passed {
-        color: #d7dcff;
-      }
-    }
-
-    @media (min-width: 1180px) and (max-height: 760px) {
-      #gameScreen {
-        padding-top: 0.4rem;
-        padding-bottom: 0.4rem;
-        gap: 0.4rem;
-      }
-
-      #moneyLadder {
-        padding-block: 0.3rem;
-      }
-
-      .moneyStep {
-        padding-block: 0.03rem;
-        font-size: 0.5rem;
-      }
-
-      .topbar {
-        padding: 0.35rem 0.5rem;
-      }
-
-      .iconBtn {
-        min-width: 2.05rem;
-        min-height: 2.05rem;
-        font-size: 0.9rem;
-      }
-
-      #questionCard {
-        padding-block: 0.4rem;
-      }
-
-      .answer {
-        min-height: 2.45rem;
-      }
-
-      .joker {
-        min-height: 2.3rem;
-      }
-    }
-
-    @media (max-width: 540px) {
-      .hero,
       .endBox {
-        padding: 1rem .75rem;
+        max-height: calc(var(--vh, 1vh) * 100 - 2rem);
+        overflow-y: auto;
       }
 
-      .brandMark {
-        width: 5.6rem;
+      .endBox h2 {
+        transform: rotate(-0.5deg);
+        font-size: clamp(2.2rem, 5vw, 3rem);
       }
 
-      #questionCard {
-        grid-template-columns: 1fr;
-        text-align: center;
-        padding-inline: 1.3rem;
+      .endBox #endAmount {
+        transform: rotate(0.3deg);
+        font-size: 3.5rem;
       }
 
-      #qEmoji {
-        display: none;
-      }
-
-      .answer {
-        padding-inline: 1.1rem;
+      .endBox button {
+        min-height: 3.3rem;
+        padding: 0.5rem 1rem;
+        font-size: 1.15rem;
       }
     }
 
     /* =====================================================
-       MOBILE PORTRAIT — MAXIMALE SCHRIFTGRÖSSE
+       DESKTOP XL — GROSSE BILDSCHIRME
+    ===================================================== */
+
+    @media (min-width: 1400px) {
+      #gameScreen {
+        padding: 1.2rem;
+        gap: 0.7rem;
+      }
+
+      .hero {
+        padding: 1.5rem 2rem;
+      }
+
+      .hero h1 {
+        font-size: 4rem;
+      }
+
+      .topbar {
+        padding: 0.6rem 1rem;
+      }
+
+      .iconBtn {
+        min-width: 3.5rem;
+        min-height: 3.5rem;
+        font-size: 1.5rem;
+      }
+
+      .statusRow {
+        font-size: 1.3rem;
+      }
+
+      #questionCard {
+        padding: 1.2rem 1.8rem;
+      }
+
+      #qText {
+        font-size: 2.4rem;
+      }
+
+      .answer {
+        font-size: 1.7rem;
+      }
+
+      .answer .letter {
+        width: 3.2rem;
+        height: 3.2rem;
+        font-size: 1.5rem;
+      }
+
+      .joker {
+        min-height: 4.2rem;
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (min-width: 1400px) and (min-height: 900px) {
+      #gameScreen {
+        grid-template-rows: auto auto auto minmax(0, 1.2fr) auto;
+      }
+
+      .topbar {
+        grid-row: 1;
+      }
+
+      .statusRow {
+        grid-row: 1;
+        grid-column: 2;
+      }
+    }
+
+    /* =====================================================
+       MOBILE PORTRAIT — ECHTER FULLSCREEN, MAXIMALE SCHRIFT
     ===================================================== */
 
     @media (max-width: 899px) and (orientation: portrait) {
@@ -1047,38 +1045,36 @@
       }
 
       .screen {
-        width: 100%;
+        width: 100vw;
         min-width: 0;
-        padding:
-          max(0.4rem, env(safe-area-inset-top))
-          max(0.45rem, env(safe-area-inset-right))
-          max(0.4rem, env(safe-area-inset-bottom))
-          max(0.45rem, env(safe-area-inset-left));
+        padding: 0;
       }
 
-      /* ---------- START SCREEN ---------- */
       #startScreen,
       #endScreen {
-        height: 100vh;
-        height: 100dvh;
-        min-height: 100vh;
-        min-height: 100dvh;
-        overflow: hidden;
+        height: calc(var(--vh, 1vh) * 100);
+        min-height: calc(var(--vh, 1vh) * 100);
       }
 
       .hero,
       .endBox {
         width: 100%;
         min-width: 0;
-        height: calc(100dvh - max(0.8rem, env(safe-area-inset-top)) - max(0.8rem, env(safe-area-inset-bottom)));
-        min-height: 0;
-        padding: 0.9rem 0.7rem;
-        gap: 0.7rem;
-        border-radius: 1.4rem;
+        height: 100%;
+        height: calc(var(--vh, 1vh) * 100);
+        min-height: calc(var(--vh, 1vh) * 100);
+        max-height: none;
+        padding:
+          calc(0.7rem + env(safe-area-inset-top))
+          calc(0.55rem + env(safe-area-inset-right))
+          calc(0.7rem + env(safe-area-inset-bottom))
+          calc(0.55rem + env(safe-area-inset-left));
+        gap: 0.65rem;
+        border-radius: 0;
+        border-width: 0;
         align-content: center;
         justify-items: center;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden;
       }
 
       .hero > *,
@@ -1101,7 +1097,7 @@
       .hero h1,
       .endBox h2 {
         max-width: 100%;
-        font-size: clamp(2.4rem, 10.5vw, 3.2rem);
+        font-size: clamp(2.4rem, 10.5vw, 3.4rem);
         line-height: 1;
         overflow-wrap: anywhere;
         letter-spacing: -0.02em;
@@ -1110,19 +1106,19 @@
       .hero .subtitle,
       .endBox .subtitle {
         margin: 0.1rem 0;
-        font-size: clamp(1.3rem, 5vw, 1.65rem);
+        font-size: clamp(1.3rem, 5vw, 1.7rem);
         line-height: 1.2;
-        padding-inline: 0.3rem;
+        padding-inline: 0.5rem;
         font-weight: 800;
       }
 
       .hero #btnStart,
       .endBox button.primary {
         width: min(92%, 24rem);
-        min-height: 4.2rem;
+        min-height: 4.5rem;
         padding: 0.7rem 1rem;
         border-radius: 1.1rem;
-        font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+        font-size: clamp(1.4rem, 6vw, 1.8rem);
         margin-top: 0.15rem;
       }
 
@@ -1131,6 +1127,7 @@
         grid-template-columns: 1fr 1fr;
         gap: 0.55rem;
         margin-top: 0.15rem;
+        padding-inline: 0.2rem;
       }
 
       .hero .startOptions button {
@@ -1143,23 +1140,19 @@
         overflow-wrap: anywhere;
       }
 
-      /* ---------- GAME SCREEN ---------- */
       #gameScreen {
         display: grid;
-        grid-template-rows: auto auto auto auto 1fr auto;
-        width: 100%;
+        grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+        width: 100vw;
         min-width: 0;
-        height: 100vh;
-        height: 100dvh;
+        height: calc(var(--vh, 1vh) * 100);
         padding:
-          max(0.35rem, env(safe-area-inset-top))
-          max(0.4rem, env(safe-area-inset-right))
-          max(0.4rem, env(safe-area-inset-bottom))
-          max(0.4rem, env(safe-area-inset-left));
-        gap: 0.55rem;
-        overflow-x: hidden;
-        overflow-y: auto;
-        scrollbar-gutter: auto;
+          calc(0.35rem + env(safe-area-inset-top))
+          calc(0.4rem + env(safe-area-inset-right))
+          calc(0.4rem + env(safe-area-inset-bottom))
+          calc(0.4rem + env(safe-area-inset-left));
+        gap: 0.5rem;
+        overflow: hidden;
       }
 
       #gameScreen > * {
@@ -1180,18 +1173,18 @@
 
       .topButtons {
         min-width: 0;
-        gap: 0.45rem;
+        gap: 0.4rem;
       }
 
       .iconBtn {
-        min-width: 3.2rem;
-        width: 3.2rem;
-        min-height: 3.2rem;
-        height: 3.2rem;
-        flex: 0 0 3.2rem;
+        min-width: 3.1rem;
+        width: 3.1rem;
+        min-height: 3.1rem;
+        height: 3.1rem;
+        flex: 0 0 3.1rem;
         padding: 0;
         border-width: 1px;
-        font-size: 1.4rem;
+        font-size: 1.35rem;
       }
 
       .statusRow {
@@ -1215,19 +1208,19 @@
       }
 
       #timerWrap {
-        height: 1.15rem;
+        height: 1.1rem;
         border-width: 1px;
       }
 
       #timerText {
-        min-width: 2.8rem;
-        font-size: 1.2rem;
+        min-width: 2.7rem;
+        font-size: 1.15rem;
         font-weight: 900;
       }
 
       #notice {
         grid-row: 3;
-        padding: 0.55rem 0.7rem;
+        padding: 0.5rem 0.7rem;
         border-width: 1px;
         border-radius: 0.85rem;
         font-size: clamp(1.1rem, 4.2vw, 1.35rem);
@@ -1237,7 +1230,7 @@
         grid-row: 4;
         min-height: 0;
         grid-template-columns: 1fr;
-        padding: 0.8rem 1.2rem;
+        padding: 0.75rem 1rem;
         border-width: 1px;
         text-align: center;
         clip-path: polygon(2.5% 0, 97.5% 0, 100% 50%, 97.5% 100%, 2.5% 100%, 0 50%);
@@ -1248,7 +1241,7 @@
       }
 
       #qText {
-        font-size: clamp(1.85rem, 7.8vw, 2.6rem);
+        font-size: clamp(1.8rem, 7.5vw, 2.5rem);
         line-height: 1.15;
         overflow-wrap: anywhere;
         hyphens: auto;
@@ -1262,13 +1255,12 @@
         border-width: 1px;
       }
 
-      /* Antworten nehmen den freien Raum ein */
       #answers {
         grid-row: 5;
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: repeat(4, minmax(4.5rem, 1fr));
-        gap: 0.55rem;
+        grid-template-rows: repeat(4, minmax(0, 1fr));
+        gap: 0.5rem;
         min-height: 0;
         height: 100%;
       }
@@ -1276,19 +1268,20 @@
       .answer {
         min-width: 0;
         min-height: 0;
-        padding: 0.6rem 1.1rem;
-        gap: 0.7rem;
+        height: 100%;
+        padding: 0.55rem 1rem;
+        gap: 0.65rem;
         border-width: 1px;
-        font-size: clamp(1.55rem, 6.5vw, 2.1rem);
+        font-size: clamp(1.45rem, 6vw, 2rem);
         line-height: 1.15;
         clip-path: polygon(3% 0, 97% 0, 100% 50%, 97% 100%, 3% 100%, 0 50%);
       }
 
       .answer .letter {
-        width: 3.2rem;
-        height: 3.2rem;
-        flex: 0 0 3.2rem;
-        font-size: 1.6rem;
+        width: 3rem;
+        height: 3rem;
+        flex: 0 0 3rem;
+        font-size: 1.55rem;
       }
 
       .answer > span:last-child {
@@ -1302,7 +1295,6 @@
         transform: scale(0.985);
       }
 
-      /* Joker-Leiste */
       #jokers {
         grid-row: 6;
         position: relative;
@@ -1313,10 +1305,10 @@
 
       .joker {
         min-width: 0;
-        min-height: 3.8rem;
-        padding: 0.45rem 0.3rem;
+        min-height: 3.5rem;
+        padding: 0.4rem 0.3rem;
         border-width: 1px;
-        font-size: clamp(1.1rem, 4.2vw, 1.35rem);
+        font-size: clamp(1rem, 4vw, 1.25rem);
         line-height: 1.1;
         overflow-wrap: anywhere;
         font-weight: 900;
@@ -1328,16 +1320,16 @@
         padding: 0.6rem 0.85rem;
         border-width: 1px;
         border-radius: 0.9rem;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
       }
 
       #endAmount {
-        font-size: clamp(2.6rem, 12vw, 3.4rem);
+        font-size: clamp(2.6rem, 12vw, 3.5rem);
         margin: 0.1rem 0;
       }
 
       .endBox h2 {
-        font-size: clamp(2rem, 9vw, 2.7rem);
+        font-size: clamp(2rem, 9vw, 2.8rem);
       }
 
       .endBox button {
@@ -1350,18 +1342,30 @@
       }
     }
 
-    /* ---------- LANDSCAPE MOBILE ---------- */
     @media (max-width: 899px) and (orientation: landscape) {
       html {
         font-size: 32px;
       }
 
+      .screen {
+        padding: 0;
+      }
+
       .hero {
-        width: min(100%, 760px);
+        width: 100%;
+        height: 100%;
+        height: calc(var(--vh, 1vh) * 100);
+        max-width: none;
+        border-radius: 0;
+        border-width: 0;
         grid-template-columns: auto minmax(0, 1fr);
         align-items: center;
-        padding: 0.5rem 0.7rem;
-        gap: 0.3rem 0.55rem;
+        padding:
+          calc(0.5rem + env(safe-area-inset-top))
+          calc(0.7rem + env(safe-area-inset-right))
+          calc(0.5rem + env(safe-area-inset-bottom))
+          calc(0.7rem + env(safe-area-inset-left));
+        gap: 0.3rem 0.6rem;
       }
 
       .hero .brandMark {
@@ -1375,59 +1379,63 @@
       }
 
       .hero h1 {
-        font-size: 1.55rem;
+        font-size: 1.8rem;
       }
 
       .hero .subtitle {
-        font-size: 0.78rem;
+        font-size: 0.9rem;
       }
 
       .hero #btnStart {
-        min-height: 2.15rem;
+        min-height: 2.6rem;
       }
 
       .hero .startOptions {
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 0.3rem;
+        gap: 0.4rem;
       }
 
       .hero .startOptions button {
-        min-height: 2.05rem;
-        font-size: 0.65rem;
+        min-height: 2.4rem;
+        font-size: 0.78rem;
       }
 
       #gameScreen {
-        gap: 0.28rem;
-        padding-block: 0.3rem;
+        gap: 0.3rem;
+        padding:
+          calc(0.3rem + env(safe-area-inset-top))
+          calc(0.4rem + env(safe-area-inset-right))
+          calc(0.3rem + env(safe-area-inset-bottom))
+          calc(0.4rem + env(safe-area-inset-left));
       }
 
       .topbar {
-        padding-block: 0.2rem;
+        padding-block: 0.25rem;
       }
 
       .iconBtn {
-        min-width: 1.9rem;
-        width: 1.9rem;
-        min-height: 1.9rem;
-        height: 1.9rem;
-        flex-basis: 1.9rem;
-        font-size: 0.75rem;
+        min-width: 2rem;
+        width: 2rem;
+        min-height: 2rem;
+        height: 2rem;
+        flex-basis: 2rem;
+        font-size: 0.9rem;
       }
 
       #questionCard {
-        padding-block: 0.35rem;
+        padding-block: 0.4rem;
       }
 
       #qText {
-        font-size: 0.95rem;
+        font-size: 1.05rem;
       }
 
       #answers {
         flex: 0 0 auto;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: repeat(2, minmax(2.15rem, 1fr));
+        grid-template-rows: repeat(2, minmax(2.4rem, 1fr));
         min-height: 0;
-        gap: 0.28rem;
+        gap: 0.3rem;
       }
 
       #jokers {
@@ -1436,22 +1444,22 @@
 
       .answer,
       .joker {
-        min-height: 2.15rem;
+        min-height: 2.4rem;
       }
 
       .answer {
-        padding-block: 0.2rem;
-        font-size: 0.82rem;
+        padding-block: 0.25rem;
+        font-size: 0.95rem;
       }
 
       .answer .letter {
-        width: 1.75rem;
-        height: 1.75rem;
-        font-size: 0.8rem;
+        width: 2rem;
+        height: 2rem;
+        font-size: 1rem;
       }
 
       .joker {
-        font-size: 0.68rem;
+        font-size: 0.82rem;
       }
     }
 
@@ -1506,7 +1514,6 @@
   <div id="confetti" aria-hidden="true"></div>
   <div id="toast" role="status" aria-live="polite"></div>
 
-  <!-- START -->
   <section id="startScreen" class="screen">
     <div class="hero">
       <div class="brandMark" aria-hidden="true"><span>Die<br>Millionen&shy;frage</span></div>
@@ -1524,7 +1531,6 @@
     </div>
   </section>
 
-  <!-- SPIEL -->
   <section id="gameScreen" hidden>
 
     <div class="topbar">
@@ -1575,7 +1581,6 @@
 
   </section>
 
-  <!-- ENDE -->
   <section id="endScreen" class="screen" hidden>
     <div class="endBox">
       <div class="brandMark" aria-hidden="true"><span>Die<br>Millionen&shy;frage</span></div>
@@ -1590,6 +1595,46 @@
 
   <script>
     'use strict';
+
+    // ==============================
+    // AUTO-FULLSCREEN & VH-FIX
+    // ==============================
+
+    function setVh() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setVh();
+    window.addEventListener('resize', setVh);
+    window.addEventListener('orientationchange', () => setTimeout(setVh, 150));
+
+    function tryFullscreen(el) {
+      const target = el || document.documentElement;
+      const rfs =
+        target.requestFullscreen ||
+        target.webkitRequestFullscreen ||
+        target.mozRequestFullScreen ||
+        target.msRequestFullscreen;
+      if (rfs) {
+        rfs.call(target).catch(function () {});
+      }
+    }
+
+    function requestLockOrientation() {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('portrait').catch(function () {});
+        }
+      } catch (e) {}
+    }
+
+    document.addEventListener('fullscreenchange', function () {
+      setTimeout(setVh, 100);
+    });
+
+    // ==============================
+    // SPIELLOGIK
+    // ==============================
 
     const QUESTION_LADDER = [
       [
@@ -1793,10 +1838,8 @@
       let effectivePx = settings.fontPx;
       
       if (isPortraitMobile) {
-        // Mobile Portrait: keine Reduktion, volle Größe oder sogar Boost
         effectivePx = Math.max(44, Math.min(64, settings.fontPx));
       } else if (isSmallScreen) {
-        // Mobile Landscape oder kleines Tablet
         effectivePx = Math.max(32, Math.min(44, settings.fontPx * 0.75));
       }
       
@@ -2163,6 +2206,10 @@
 
     function startRun() {
       if (startupLock) return;
+
+      // AUTO-FULLSCREEN: bei User-Interaction
+      tryFullscreen(document.documentElement);
+      requestLockOrientation();
 
       startupLock = true;
 
